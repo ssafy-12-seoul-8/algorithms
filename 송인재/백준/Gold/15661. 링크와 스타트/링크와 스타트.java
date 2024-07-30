@@ -8,18 +8,18 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		int[][] abs = new int[n + 1][n + 1];
+		int[][] abs = new int[n][n];
 		
-		for (int i = 1; i <= n; i++) {
+		for (int i = 0; i < n; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			
-			for (int j = 1; j <= n; j++) {
+			for (int j = 0; j < n; j++) {
 				abs[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		
-		for (int i = 1; i < n; i++) {
-			formTeam(abs, new boolean[n + 1], i, 0);
+		for (int i = 0; i < n - 1; i++) {
+			formTeam(abs, new boolean[n], i, 0);
 		}
 		
 		System.out.println(minDiff);
@@ -47,7 +47,7 @@ public class Main {
 		int startTeam = 0;
 		int linkTeam = 0;
 		
-		for (int i = 1; i < abs.length - 1; i++) {
+		for (int i = 0; i < abs.length - 1; i++) {
 			for (int j = i + 1; j < abs.length; j++) {
 				if (teams[i] && teams[j]) {
 					startTeam += abs[i][j] + abs[j][i];
