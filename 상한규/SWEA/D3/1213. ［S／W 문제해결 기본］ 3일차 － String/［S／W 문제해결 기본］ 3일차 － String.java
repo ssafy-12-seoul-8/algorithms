@@ -14,13 +14,11 @@ public class Solution {
 			int testNumber = Integer.parseInt(br.readLine());
 			String answerString = br.readLine();
 			String testString = br.readLine();
-
-			int temp = (int)answerString.charAt(0);
-			testString = temp + testString + temp;
+			testString = testString + testString;
 			
 			String[] testArray = testString.split(answerString);
 
-			result = testArray.length - 1;
+			result = testArray.length / 2;
 			
 			System.out.printf("#%d %d\n", testNumber, result);
 		}
