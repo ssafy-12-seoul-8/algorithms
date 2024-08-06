@@ -72,7 +72,7 @@ public class Solution {
     		char c = postfix.charAt(i);
 			// 숫자라면 stack에 넣기
     		if (c >= '0' && c <= '9') {
-    			stack.add(c - '0');
+    			stack.push(c - '0');
     		} else {
     			int num2 = stack.pop();
     			int num1 = stack.pop();
