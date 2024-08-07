@@ -11,22 +11,18 @@ class Solution {
 		
 		for(int i = 0; i < T; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
+			StringBuilder sb = new StringBuilder();
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
+			int max = Math.max(N, M);
+			int min = Math.min(N, M);
 
-			System.out.printf("#%d ",i + 1);
-			if(N == M) {
-				System.out.print(N + 1);
+			sb.append("#").append(i + 1);
+
+			for(int j = min + 1; j <= max + 1; j++) {
+				sb.append(" ").append(j);
 			}
-			else {
-				int max = Math.max(N, M);
-				int min = Math.min(N, M);
-				
-				for(int j = min + 1; j <= max + 1; j++) {
-					System.out.printf("%d ", j);
-				}
-			}
-			System.out.println();
+			System.out.println(sb);
 		}
 	}
 }
