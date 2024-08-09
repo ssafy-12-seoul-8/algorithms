@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
 public class Solution {
 	public static int n, m, min, sum;
 	public static int[][] flag, memoColorIn;
-	public static int[] dColor = { 0, 1 };
 	public static Map<Character, Integer> map = new HashMap<>();
 	
 	static {
@@ -83,15 +82,19 @@ public class Solution {
 			backtracking(n - 1, 1);
 			sum -= cnt;
 		} else {
-			for (int i = 0; i < 2; i++) {
-				int newColor = prevColor + dColor[i];
-				if (newColor < 3) {
-					int cnt = colorIn(row, newColor);
-					sum += cnt;
-					backtracking(row + 1, newColor);
-					sum -= cnt;
-				}
-			}	
+			int cnt = colorIn(row, prevColor);
+			sum += cnt;
+			backtracking(row + 1, prevColor);
+			sum -= cnt;
+			
+			if (prevColor < 2) {
+				cnt = colorIn(row, prevColor + 1);
+				sum += cnt;
+				backtracking(row + 1, prevColor + 1);
+				sum -= cnt;
+				
+			}
+			
 		}
 	}
 }
