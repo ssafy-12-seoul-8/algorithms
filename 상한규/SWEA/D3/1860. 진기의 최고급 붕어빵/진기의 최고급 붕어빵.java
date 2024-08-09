@@ -17,6 +17,7 @@ class Solution {
 			int M = Integer.parseInt(st.nextToken());
 			int K = Integer.parseInt(st.nextToken());
 			st = new StringTokenizer(br.readLine());
+			StringBuilder sb = new StringBuilder();
 			PriorityQueue<Integer> pq = new PriorityQueue<>();
 			
 			for(int j = 0; j < N; j++) {
@@ -33,9 +34,10 @@ class Solution {
 				}
 			}
 			
+			sb.append("#").append(i + 1).append(" ").append(result ? "Possible" : "Impossible");
 			
 			
-			System.out.printf("#%d %s\n", i + 1 , result ? "Possible" : "Impossible");
+			System.out.println(sb);
 		}
 	}
 }
