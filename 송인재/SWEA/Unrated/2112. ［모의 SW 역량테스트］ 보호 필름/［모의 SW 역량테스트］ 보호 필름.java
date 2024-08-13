@@ -33,6 +33,12 @@ public class Solution {
 	}
 	
 	static void combination(int index, int count) {
+		if (k == 1) {
+			min = 0;
+			
+			return;
+		}
+		
 		if (testCells()) {
 			min = Math.min(min, count);
 			
@@ -40,6 +46,10 @@ public class Solution {
 		}
 		
 		for (int i = index; i < d; i++) {
+			if (count + 1 >= min) {
+				continue;
+			}
+			
 			int[] temp = cells[i];
 			cells[i] = new int[w];
 			
