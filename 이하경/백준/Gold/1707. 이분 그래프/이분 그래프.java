@@ -29,6 +29,7 @@ public class Main {
 				int u = Integer.parseInt(st.nextToken());
 				int v = Integer.parseInt(st.nextToken());
 
+
 				if (!map.containsKey(u)) {
 					map.put(u, new ArrayList<>());
 				}
@@ -40,25 +41,15 @@ public class Main {
 				map.get(v).add(u);
 			}
 
+			boolean bipartiteGraph = true;
 			split = new int[vt + 1];
 			for (int i = 1; i <= vt; i++) {
 				if (split[i] == 0) {
 					split[i] = 1;
-					dfs(i, 1);
-				}
-			}
-
-			boolean bipartiteGraph = true;
-			// 모든 간선 확인
-			for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
-				int u = entry.getKey();
-				List<Integer> values = entry.getValue();
-				for (int v : values) {
-					if (split[u] == split[v]) {
+					if (!splitGraph(i, 1)) {
 						bipartiteGraph = false;
 					}
 				}
-
 			}
 
 			System.out.println(bipartiteGraph ? "YES" : "NO");
@@ -67,18 +58,23 @@ public class Main {
 
 	}
 
-	// dfs 하며 1과 2 를 번갈아가며 표시
-	public static void dfs(int start, int side) {
+	public static boolean splitGraph(int start, int side) {
 		if (!map.containsKey(start)) {
-			return;
+			return true;
 		}
 
 		List<Integer> list = map.get(start);
 		for (int i : list) {
 			if (split[i] == 0) {
 				split[i] = side == 1 ? 2 : 1;
-				dfs(i, split[i]);
+				if (!splitGraph(i, split[i])) {
+					return false;
+				}
+			} else if (split[i] == side) {
+				return false;
 			}
 		}
+
+		return true;
 	}
 }
