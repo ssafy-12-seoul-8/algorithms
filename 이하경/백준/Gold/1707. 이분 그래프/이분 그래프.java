@@ -48,6 +48,7 @@ public class Main {
 					split[i] = 1;
 					if (!splitGraph(i, 1)) {
 						bipartiteGraph = false;
+                        break;
 					}
 				}
 			}
