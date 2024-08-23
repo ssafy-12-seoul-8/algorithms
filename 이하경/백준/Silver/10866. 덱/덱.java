@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -11,7 +9,8 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 		
 		int n = Integer.parseInt(br.readLine());
-		Deque<Integer> deque = new ArrayDeque<>();
+		int[] deque = new int[2 * n + 1];
+		int head = n, tail = n;
 
 	
 		for (int i = 0; i < n; i++) {
@@ -20,43 +19,43 @@ public class Main {
 
 			switch (cmd) {
 			case "push_front":
-				deque.addFirst(Integer.parseInt(st.nextToken()));
+				deque[head--] = Integer.parseInt(st.nextToken());
 				break;
 			case "push_back":
-				deque.addLast(Integer.parseInt(st.nextToken()));
+				deque[++tail] = Integer.parseInt(st.nextToken());
 				break;
 			case "pop_front":
-				if (deque.isEmpty()) {
+				if (head == tail) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(deque.pollFirst()).append("\n");
+					sb.append(deque[++head]).append("\n");
 				}
 				break;
 			case "pop_back":
-				if (deque.isEmpty()) {
+				if (head == tail) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(deque.pollLast()).append("\n");
+					sb.append(deque[tail--]).append("\n");
 				}
 				break;
 			case "size":
-				sb.append(deque.size()).append("\n");
+				sb.append(tail - head).append("\n");
 				break;
 			case "empty":
-				sb.append(deque.isEmpty() ? 1 : 0).append("\n");
+				sb.append(head == tail ? 1 : 0).append("\n");
 				break;
 			case "front":
-				if (deque.isEmpty()) {
+				if (head == tail) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(deque.peekFirst()).append("\n");
+					sb.append(deque[head + 1]).append("\n");
 				}
 				break;
 			default:
-				if (deque.isEmpty()) {
+				if (head == tail) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(deque.peekLast()).append("\n");
+					sb.append(deque[tail]).append("\n");
 				}
 				break;
 			}
