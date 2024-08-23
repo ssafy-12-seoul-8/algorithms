@@ -2,17 +2,11 @@ import java.util.*;
 
 class Solution {
     public String solution(String s) {
-        s = s.toLowerCase();
-        String[] array = s.split("");
-        array[0] = array[0].toUpperCase();
-        
-        for(int i = 1; i < array.length; i++) {
-            if(array[i - 1].equals(" ")) {
-                array[i] = array[i].toUpperCase();
-            }
-        }
-        
-        return Arrays.stream(array)
-            .reduce("", (a, b) -> a + b);
+        return Arrays.stream(s.toLowerCase()
+                     .split(""))
+                .reduce("",
+                        (a, b) -> a.isBlank() || a.charAt(a.length() - 1) == ' '
+                            ? a + b.toUpperCase()
+                            : a + b);
     }
 }
