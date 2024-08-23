@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -11,7 +9,8 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 		
 		int n = Integer.parseInt(br.readLine());
-		Deque<Integer> q = new ArrayDeque<>();
+		int[] q = new int[n];
+		int front = -1, back = -1;
 
 	
 		for (int i = 0; i < n; i++) {
@@ -19,28 +18,28 @@ public class Main {
 			String cmd = st.nextToken();
 
 			if (cmd.equals("push")) {
-				q.offer(Integer.parseInt(st.nextToken()));
+				q[++back] = Integer.parseInt(st.nextToken());
 			} else if (cmd.equals("pop")) {
-				if (q.isEmpty()) {
+				if (front == back) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(q.poll()).append("\n");
+					sb.append(q[++front]).append("\n");
 				}
 			} else if (cmd.equals("size")) {
-				sb.append(q.size()).append("\n");
+				sb.append(back - front).append("\n");
 			} else if (cmd.equals("empty")) {
-				sb.append(q.isEmpty() ? 1 : 0).append("\n");
+				sb.append(front == back ? 1 : 0).append("\n");
 			} else if (cmd.equals("front")) {
-				if (q.isEmpty()) {
+				if (front == back) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(q.peekFirst()).append("\n");
+					sb.append(q[front + 1]).append("\n");
 				}
 			} else {
-				if (q.isEmpty()) {
+				if (front == back) {
 					sb.append(-1).append("\n");
 				} else {
-					sb.append(q.peekLast()).append("\n");
+					sb.append(q[back]).append("\n");
 				}
 			}
 
