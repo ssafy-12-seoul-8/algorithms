@@ -1,42 +1,36 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		
-		Deque<Tower> stack = new ArrayDeque<>();
-		int n = Integer.parseInt(br.readLine());
-		st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
 
-		for (int i = 1; i <= n; i++) {
-			int k = Integer.parseInt(st.nextToken());
-			while (!stack.isEmpty() && stack.peekFirst().height <= k) {
-				stack.pop();
-			}
-			if (stack.isEmpty()) {
-				sb.append(0).append(" ");
-			} else {
-				sb.append(stack.peekFirst().index).append(" ");
-			}
-			stack.push(new Tower(i, k));
-		}
+        int n = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        int[] tower = new int[n + 1];
+        int[] ans = new int[n + 1];
 
-		System.out.println(sb);
-	}
-}
+        for (int i = 1; i <= n; i++) {
+            tower[i] = Integer.parseInt(st.nextToken());
+        }
 
-class Tower {
-	int index;
-	int height;
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = n; i >= 1; i--) {
+            while (!stack.isEmpty() && tower[stack.peekFirst()] <= tower[i]) {
+                ans[stack.pop()] = i;
+            }
+            stack.push(i);
+        }
 
-	public Tower(int index, int height) {
-		this.index = index;
-		this.height = height;
-	}
+        for (int i = 1; i <= n; i++) {
+            sb.append(ans[i]).append(" ");
+        }
+        System.out.println(sb);
+    }
 }
