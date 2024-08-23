@@ -20,17 +20,11 @@ public class Main {
 
 		sb.append("<");
 		
-		int cnt = k - 1;
 		while (!q.isEmpty()) {
-			if (cnt == 0) {
-				sb.append(q.poll()).append(", ");
-				if (!q.isEmpty()) {
-					cnt = k - 1;
-				}
-				continue;
+			for (int i = 0; i < k - 1; i++) {
+				q.offer(q.poll());
 			}
-			q.offer(q.poll());
-			cnt--;
+			sb.append(q.poll()).append(", ");
 		}
 
 		sb.setLength(sb.length() - 2);
