@@ -15,17 +15,18 @@ public class Main {
         for (int i = 0; i < n; i++) {
             int height = Integer.parseInt(br.readLine());
             int cnt = 1;
-            while (!stack.isEmpty()) {
-                Person prev = stack.pop();
-                if (prev.height > height) {
-                    stack.push(prev);
-                    ans++;
-                    break;
+            while (!stack.isEmpty() && stack.peek().height <= height) {
+                Person pop = stack.pop();
+                // 나보다 같거나 작은 것들은 여러개를 다 볼 수 있다
+                ans += pop.cnt;
+                if (pop.height == height) {
+                    // 나를 넣을때 같이 넣어주기 위해 키가 같은거 개수 세기
+                    cnt += pop.cnt;
                 }
-                ans += prev.cnt;
-                if (prev.height == height) {
-                    cnt += prev.cnt;
-                }
+            }
+            // 스텍이 비지 않았다면 나보다 큰 사람 하나를 볼 수 있다
+            if (!stack.isEmpty()) {
+                ans++;
             }
             stack.push(new Person(height, cnt));
         }
