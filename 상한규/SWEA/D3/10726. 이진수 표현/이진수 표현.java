@@ -12,14 +12,9 @@ public class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
-			int resultBit = (int)Math.pow(2, N) - 1;
-			boolean result = false;
+			int resultBit = (1 << N) - 1;
 			
-			if((M & resultBit) == resultBit) {
-				result = true;
-			}
-			
-			System.out.printf("#%d %s\n", test_case, result ? "ON" : "OFF");
+			System.out.printf("#%d %s\n", test_case, (M & resultBit) == resultBit ? "ON" : "OFF");
 		}
 	}
 }
