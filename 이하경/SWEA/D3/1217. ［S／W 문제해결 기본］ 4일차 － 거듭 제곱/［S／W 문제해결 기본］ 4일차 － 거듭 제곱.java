@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 public class Solution {
+	static int[] arr;
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
 
@@ -10,21 +11,21 @@ public class Solution {
 			int m = sc.nextInt();
 			System.out.println("#" + t + " " + pow(n, m));
 		}
+
+		sc.close();
 	}
 
 	static int pow(int n, int m) {
-		if (m == 0) {
-			return 1;
+		int ans = 1;
+		while (m > 0) {
+			if (m % 2 == 1) {
+				ans *= n;
+			}
+			m >>= 1;
+			n *= n;
 		}
-		if (m == 1) {
-			return n;
-		}
-		if (m % 2 == 0) {
-			int tmp = pow(n, m / 2);
-			return tmp * tmp;
-		}
-		int tmp = pow(n, m / 2);
-		return tmp * tmp * n;
+		return ans;
 	}
+
 }
 
