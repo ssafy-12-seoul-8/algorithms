@@ -1,42 +1,57 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class Solution {
+	
+	static int N, K, cnt;
 	static int[] nums;
-	static int N, K, result;
-	public static void main(String[] args) throws IOException {
+
+	public static void main(String[] args) throws Exception {
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("input.txt")));
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int T = Integer.parseInt(st.nextToken());
 		
-		int T = Integer.parseInt(br.readLine());
-		
-		for(int test_case = 1; test_case <= T; test_case++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int test_case = 1; test_case <= T; test_case++) {
+			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
 			K = Integer.parseInt(st.nextToken());
 			nums = new int[N];
-			result = 0;
 			st = new StringTokenizer(br.readLine());
 			
-			for(int i = 0; i < N; i++) {
-				nums[i] = Integer.parseInt(st.nextToken());
+			for (int i = 0; i < N; i++) {
+				nums[i] = Integer.parseInt(st.nextToken()); 
 			}
 			
-			combination(0, 0);
+			recur(0, 0);
 			
-			System.out.printf("#%d %d\n", test_case, result);
+			sb.append("#").append(test_case).append(" ").append(cnt).append("\n");
+			
+			cnt = 0;
+			
 		}
+		System.out.println(sb);
 	}
-	static void combination(int index, int sum) {
-		if(sum > K) {
+	
+	static void recur(int idx, int total) {
+		if (total == K) {
+			cnt++;
+		}
+		
+		if (idx == N || total >= K) {
 			return;
 		}
-		if(sum == K) {
-			result++;
-			return;
-		} 	
-		for(int i = index; i < N; i++) {
-			combination(i + 1, sum + nums[i]);
+		
+		for (int i = idx; i < N; i++) {
+			total += nums[i];
+			recur(i + 1, total);
+			total -= nums[i];
 		}
 	}
+	
 }
