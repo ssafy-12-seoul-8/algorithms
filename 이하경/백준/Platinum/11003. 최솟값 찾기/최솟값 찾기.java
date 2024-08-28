@@ -13,24 +13,21 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int l = Integer.parseInt(st.nextToken());
 
-        Deque<Integer> dq = new ArrayDeque<>();
+        Deque<int[]> dq = new ArrayDeque<>();
 
-        int[] arr = new int[n];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             int a = Integer.parseInt(st.nextToken());
-            arr[i] = a;
 
-            while (!dq.isEmpty() && dq.peekLast() > a) {
+            while (!dq.isEmpty() && dq.peekLast()[0] > a) {
                 dq.pollLast();
             }
-            dq.offerLast(a);
-
-            if (i - l >= 0 && dq.peekFirst() == arr[i - l]) {
+            if (!dq.isEmpty() && dq.peekFirst()[1] <= i - l){
                 dq.pollFirst();
             }
+            dq.offerLast(new int[]{ a, i });
 
-            sb.append(dq.peekFirst()).append(" ");
+            sb.append(dq.peekFirst()[0]).append(" ");
         }
 
         System.out.println(sb);
