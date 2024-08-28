@@ -22,10 +22,11 @@ public class Solution {
     	if (upper == 1) {
     		return lower;
     	}
+    	int temp = pow(lower, upper / 2);
     	if (upper % 2 == 0) {
-    		return pow(lower, upper / 2) * pow(lower, upper / 2);    		
+    		return temp * temp;    		
     	} else {
-    		return pow(lower, upper / 2) * pow(lower, upper / 2) * lower;
+    		return temp * temp * lower;
     	}
     	
     }
