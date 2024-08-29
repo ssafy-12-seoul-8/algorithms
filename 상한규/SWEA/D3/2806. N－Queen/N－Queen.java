@@ -16,7 +16,14 @@ public class Solution {
 			result = 0;
 			column = new int[N];
 			
-			recur(0);
+			if(N % 2 == 0) {
+				recur(0);
+				result *= 2;
+			} else {
+				recur(0);
+				result *= 2;
+				recur2(0);
+			}
 			
 			System.out.printf("#%d %d\n", tc + 1, result);
 		}
@@ -28,7 +35,7 @@ public class Solution {
 			
 			return ;
 		} else {
-			for(int i = 0; i < N; i++) {
+			for(int i = 0; i < (count == 0 ? N / 2 : N); i++) {
 				if(check(count, i)) {
 					column[count] = i;
 					
@@ -37,6 +44,29 @@ public class Solution {
 			}
 		}
 	}
+	
+	static void recur2(int count) {
+		if(count == N) {
+			result++;
+			
+			return ;
+		} else {
+			if(count == 0) {
+				column[count] = N / 2;
+				
+				recur(count + 1);
+			} else {
+				for(int i = 0; i < N; i++) {
+					if(check(count, i)) {
+						column[count] = i;
+						
+						recur2(count + 1);
+					}
+				}
+			}
+		}
+	}
+	
 	static boolean check(int r, int c) {
 		for(int i = 0; i < r; i++) {
 			if(column[i] == c || Math.abs(column[i] - c) == Math.abs(i - r)) {
