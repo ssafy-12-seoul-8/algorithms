@@ -1,91 +1,86 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Main {
-	static char[][] seats;
-	static boolean[][] picked;
-	static int[] dx = { 0, 1, 0, -1 };
-	static int[] dy = { 1, 0, -1, 0 };
+	static boolean[][] isSom;
+	static boolean[] visited;
+	static int[] dx = { 1, 0, -1, 0 };
+	static int[] dy = { 0, 1, 0, -1 };
 	static int cnt;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		seats = new char[5][5];
+		isSom = new boolean[5][5];
+		visited = new boolean[1 << 25];
+
 		for (int i = 0; i < 5; i++) {
-			seats[i] = br.readLine().toCharArray();
-		}
-
-		picked = new boolean[5][5];
-		cnt = 0;
-
-		pick(0, 0, 0);
-		System.out.println(cnt);
-	}
-
-	// n번을 뽑을지말지 결정, k번째 뽑는중
-	static void pick(int n, int k, int sCnt) {
-		if (k == 7) {
-			if (sCnt >= 4 && isNear()) {
-				cnt++;
-			}
-			return;
-		}
-
-		if (n >= 25) {
-			return;
-		}
-
-		// n번은 뽑지 않겠습니다
-		pick(n + 1, k, sCnt);
-
-		// n번을 뽑겠습니다
-		picked[n / 5][n % 5] = true;
-		pick(n + 1, k + 1, seats[n / 5][n % 5] == 'S' ? sCnt + 1 : sCnt);
-		picked[n / 5][n % 5] = false;
-	}
-
-	static boolean isNear() {
-		Queue<Point> q = new LinkedList<>();
-		boolean[][] visit = new boolean[5][5];
-
-		all: for (int i = 0; i < 5; i++) {
+			String input = br.readLine();
 			for (int j = 0; j < 5; j++) {
-				if (picked[i][j]) {
-					q.add(new Point(i, j));
-					visit[i][j] = true;
-					break all;
+				isSom[i][j] = input.charAt(j) == 'S' ? true : false;
+			}
+		}
+		
+		cnt = 0;
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				if (isSom[i][j]) {
+					find(1, 0, idxToBit(i, j));
+				} else {
+					find(0, 1, idxToBit(i, j));
 				}
 			}
 		}
 
-		int nCnt = 0;
-		while (!q.isEmpty()) {
-			Point p = q.poll();
-			nCnt++;
+		System.out.println(cnt);
 
-			for (int i = 0; i < 4; i++) {
-				int nx = p.x + dx[i];
-				int ny = p.y + dy[i];
-				if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5 && picked[nx][ny] && !visit[nx][ny]) {
-					visit[nx][ny] = true;
-					q.add(new Point(nx, ny));
+	}
+
+	static void find(int sCnt, int yCnt, int visitBit) {
+		if (yCnt >= 4) {
+			return;
+		}
+
+		if (sCnt + yCnt == 7) {
+			cnt++;
+			return;
+		}
+
+		// 현재 표시된 비트 찾기
+		for (int i = 0; i < 25; i++) {
+			if ((visitBit & (1 << i)) != 0) {
+				int x = bitToXidx(i);
+				int y = bitToYidx(i);
+
+				for (int j = 0; j < 4; j++) {
+					int nx = x + dx[j];
+					int ny = y + dy[j];
+					
+					// 현재 포함되지도 않고, 넣은 결과도 방문한 적 없을때
+					if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5 && (visitBit & idxToBit(nx, ny)) == 0
+							&& !visited[visitBit | idxToBit(nx, ny)]) {
+						visited[visitBit | idxToBit(nx, ny)] = true;
+						if (isSom[nx][ny]) {
+							find(sCnt + 1, yCnt, visitBit | idxToBit(nx, ny));
+						} else {
+							find(sCnt, yCnt + 1, visitBit | idxToBit(nx, ny));
+						}
+					}
+
 				}
 			}
 		}
-		return nCnt == 7;
+	}
+
+	static int idxToBit(int x, int y) {
+		return 1 << ((x * 5) + y);
+	}
+
+	static int bitToXidx(int bit) {
+		return bit / 5;
+	}
+
+	static int bitToYidx(int bit) {
+		return bit % 5;
 	}
 }
-
-class Point {
-	int x;
-	int y;
-
-	public Point(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-}
-
