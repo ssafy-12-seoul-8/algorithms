@@ -1,30 +1,32 @@
 import java.util.Scanner;
 
-class Solution {
-	public static void main(String args[]) throws Exception {
+public class Solution {
+	static int result, count;
+	
+	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
 		
 		int T = 10;
 		
 		for(int test_case = 1; test_case <= T; test_case++) {
-			int result = 0;
-			int testNumber = sc.nextInt();
-			int value = sc.nextInt();
-			int repeatIndex = sc.nextInt();
+			sc.nextInt();
+			int number = sc.nextInt();
+			count = sc.nextInt();
+			result = 1;
+			times(number, 0);
 			
-			result = repeatTimes(value, repeatIndex);
-			
-			System.out.printf("#%d %d\n", testNumber, result);
+			System.out.printf("#%d %d\n", test_case, result);
 		}
 		
 		sc.close();
 	}
 	
-	
-	static int repeatTimes(int value, int repeatIndex) {
-		if(repeatIndex == 1) {
-			return value;
+	static void times(int number, int current) {
+		if(current >= count) {
+			return;
+		} else {
+			result *= number;
+			times(number, ++current);
 		}
-		return value * repeatTimes(value, repeatIndex - 1);
 	}
 }
