@@ -20,17 +20,23 @@ public class Solution {
             st = new StringTokenizer(br.readLine());
             N = Integer.parseInt(st.nextToken());
             board = new int[N][N];
+            int lastDay = 0;
             
             for (int i = 0; i < N; i++) {
                 st = new StringTokenizer(br.readLine());
                 for (int j = 0; j < N; j++) {
                 	board[i][j] = Integer.parseInt(st.nextToken());
+                	lastDay = Math.max(lastDay, board[i][j]);
                 }
+            }
+            
+            if (lastDay > 100) {
+            	lastDay = 100;
             }
             
             int maxCnt = 1;
              
-            for (int day = 1; day <= 100; day++) {
+            for (int day = 1; day <= lastDay; day++) {
             	visit = new boolean[N][N];
             	
             	int cnt = 0;
