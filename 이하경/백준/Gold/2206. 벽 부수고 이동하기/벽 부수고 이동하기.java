@@ -53,22 +53,19 @@ public class Main {
                     if (nr == n - 1 && nc == m - 1) {
                         return curr.dist + 1;
                     }
-
-                    if (map[nr][nc] == 1 && curr.canBreak && !visitAfter[nr][nc]) { // 벽일때
-                        visitAfter[nr][nc] = true;
-                        q.add(new Point(nr, nc, curr.dist + 1, false));
-                        continue;
-                    }
-
-                    if (map[nr][nc] == 0 && curr.canBreak) {
-                        visitBefore[nr][nc] = true;
-                        q.add(new Point(nr, nc, curr.dist + 1, true));
-                        continue;
-                    }
-
-                    if (map[nr][nc] == 0 && !visitAfter[nr][nc] && !curr.canBreak) {
-                        visitAfter[nr][nc] = true;
-                        q.add(new Point(nr, nc, curr.dist + 1, false));
+                    if (map[nr][nc] == 0) { // 벽이 아닐때
+                        if (curr.canBreak) { // 벽 부수기 전이면
+                            visitBefore[nr][nc] = true;
+                            q.add(new Point(nr, nc, curr.dist + 1, true));
+                        } else if (!visitAfter[nr][nc]) { // 이미 하나 부순적있으면
+                            visitAfter[nr][nc] = true;
+                            q.add(new Point(nr, nc, curr.dist + 1, false));
+                        }
+                    } else { // 벽일때
+                        if (curr.canBreak && !visitAfter[nr][nc]) { // 부술수있으면
+                            visitAfter[nr][nc] = true;
+                            q.add(new Point(nr, nc, curr.dist + 1, false));
+                        }
                     }
                 }
             }
