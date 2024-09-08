@@ -39,11 +39,10 @@ public class Solution {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					if (mountain[i][j] == maxH) {
-						path(i, j, 1, true);
+						path(i, j, maxH, 1, true);
 					}
 				}
 			}
-			
 			
 			sb.append("#").append(tc).append(" ").append(maxD).append("\n");
 			
@@ -53,7 +52,7 @@ public class Solution {
 		
 	}
 	
-	static void path (int r, int c, int dist, boolean active) {
+	static void path (int r, int c, int h, int dist, boolean active) {
 		
 		if (dist > maxD) {
 			maxD = dist;
@@ -65,13 +64,10 @@ public class Solution {
 			int nr = r + dr[i];
 			int nc = c + dc[i];			
 			if (nr >= 0 && nr < N && nc >= 0 && nc < N && !visited[nr][nc]) {
-				if (mountain[r][c] > mountain[nr][nc]) {
-					path(nr, nc, dist + 1, active);
-				} else if (active && mountain[r][c] > mountain[nr][nc] - K) {
-					int temp = mountain[nr][nc];
-					mountain[nr][nc] = mountain[r][c] - 1;
-					path(nr, nc, dist + 1, false);
-					mountain[nr][nc] = temp;
+				if (h > mountain[nr][nc]) {
+					path(nr, nc, mountain[nr][nc], dist + 1, active);
+				} else if (active && h > mountain[nr][nc] - K) {
+					path(nr, nc, mountain[r][c] - 1, dist + 1, false);
 				}
 			}
 		}
