@@ -1,11 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
 
 	static int D, W, K;
 	static int[][] film;
+	static int[] A, B;
 	static int minCnt;
  
 	public static void main(String[] args) throws Exception {
@@ -30,6 +32,9 @@ public class Solution {
 				}
 			}
 			
+			A = new int[W];
+			B = new int[W];
+			Arrays.fill(B, 1);
 			minCnt = K;
 			
 			makeFilm(0, 0);
@@ -59,27 +64,16 @@ public class Solution {
 		
 		makeFilm(idx + 1, cnt);
 		
-		int[] temp = new int[W];
-		for (int i = 0; i < W; i++) {
-			temp[i] = film[idx][i];
-		}
+		int[] temp = film[idx];
 		
-		reagent(idx, 0);
+		film[idx] = A;
 		makeFilm(idx + 1, cnt + 1);
 		
-		reagent(idx, 1);
+		film[idx] = B;
 		makeFilm(idx + 1, cnt + 1);
 		
-		for (int i = 0; i < W; i++) {
-			film[idx][i] = temp[i];
-		}
+		film[idx] = temp;
 		
-	}
-	
-	static void reagent(int r, int type) {
-		for (int i = 0; i < W; i++) {
-			film[r][i] = type;
-		}
 	}
 	
 	static boolean ok() {
