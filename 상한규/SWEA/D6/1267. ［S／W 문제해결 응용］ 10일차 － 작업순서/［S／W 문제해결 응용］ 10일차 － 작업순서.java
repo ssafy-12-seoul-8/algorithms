@@ -16,17 +16,21 @@ public class Solution {
 			
 			int V = Integer.parseInt(st.nextToken());
 			int E = Integer.parseInt(st.nextToken());
-			int[][] adjArray = new int[V + 1][V + 1];
+			ArrayList<Integer>[] adjList = new ArrayList[V + 1];
 			int[] degree = new int[V + 1];
 			Queue<Integer> queue = new LinkedList<>();
 			
 			st = new StringTokenizer(br.readLine());
 			
+			for(int i = 1; i < V + 1; i++) {
+				adjList[i] = new ArrayList<>();
+			}
+			
 			for(int i = 0; i < E; i++) {
 				int a = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
-				
-				adjArray[a][b] = 1;
+
+				adjList[a].add(b);
 				degree[b]++;
 			}
 			
@@ -39,16 +43,11 @@ public class Solution {
 			while(!queue.isEmpty()) {
 				int curr = queue.poll();
 				result.append(curr).append(" ");
-
-				for(int i = 1; i < V + 1; i++) {
-					if(adjArray[curr][i] != 0) {
-						adjArray[curr][i] = 0;
-						degree[i]--;
-						
-
-						if(degree[i] == 0) {
-							queue.offer(i);
-						}
+				
+				for(int b : adjList[curr]) {
+					degree[b]--;
+					if(degree[b] == 0) {
+						queue.offer(b);
 					}
 				}
 			}
