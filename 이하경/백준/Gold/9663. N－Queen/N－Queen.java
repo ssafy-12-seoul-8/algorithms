@@ -11,7 +11,15 @@ public class Main {
 		n = Integer.parseInt(br.readLine());
 		cnt = 0;
 		queen = new int[n];
-		nQueen(0);
+		for (int i = 0; i < n / 2; i++) {
+			queen[0] = i;
+			nQueen(1);
+		}
+		cnt *= 2;
+		if (n % 2 == 1) {
+			queen[0] = n / 2;
+			nQueen(1);
+		}
 
 		System.out.println(cnt);
 	}
