@@ -24,6 +24,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
 
 		int N = Integer.parseInt(br.readLine());
 		Position[] arr = new Position[N];
@@ -37,7 +38,8 @@ public class Main {
 		Arrays.sort(arr);
 		
 		for(Position p : arr) {
-			System.out.println(p.x + " " + p.y);
+			sb.append(p.x).append(" ").append(p.y).append("\n");
 		}
+		System.out.println(sb);
 	}
 }
