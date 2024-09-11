@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 public class Main {
 	static int[] nums;
@@ -15,26 +13,44 @@ public class Main {
 
 		int n = Integer.parseInt(br.readLine());
 		int[] arr = new int[n];
+		int[] copyArr = new int[n];
 
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		TreeSet<Integer> set = new TreeSet<>();
-		for (int i = 0; i < n; i++) {
-			set.add(arr[i]);
+			copyArr[i] = arr[i];
 		}
 
-		Map<Integer, Integer> map = new HashMap<>();
-		int idx = 0;
-		for (int s : set) {
-			map.put(s, idx++); // 숫자 s가 i번쨰이다
-		}
+		Arrays.sort(arr);
 
+		int idx = 0; // idx번까지 값이 들어있다
+		int prev = arr[0];
+		for (int i = 1; i < n; i++) {
+			if (arr[i] != prev) {
+				arr[++idx] = arr[i];
+				prev = arr[i];
+			}
+		}
+		
 		for (int i = 0; i < n; i++) {
-			sb.append(map.get(arr[i])).append(" ");
+			sb.append(binarySearch(arr, 0, idx, copyArr[i])).append(" ");
 		}
 
 		System.out.println(sb);
+	}
+
+	static int binarySearch(int[] arr, int start, int end, int target) {
+		while (start <= end) {
+			int mid = (start + end) / 2;
+			if (arr[mid] == target) {
+				return mid;
+			}
+			if (arr[mid] > target) {
+				end = mid - 1;
+				continue;
+			}
+			start = mid + 1;
+		}
+		return -1;
 	}
 }
