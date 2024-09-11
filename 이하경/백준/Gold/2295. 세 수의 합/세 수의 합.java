@@ -13,30 +13,37 @@ public class Main {
 		}
 		Arrays.sort(setU);
 
-		// x, y의 합 저장
-		int[] twoSum = new int[n * (n + 1) / 2];
-		int idx = -1;
-		for (int i = 0; i < n; i++) {
-			for (int j = i; j < n; j++) {
-				twoSum[++idx] = setU[i] + setU[j];
+		for (int k = n - 1; k > 0; k--) {
+			for (int a = 0; a < k; a++) {
+				for (int b = a; b < k; b++) {
+					int c = setU[k] - setU[a] - setU[b];
+					if (c < 0) {
+						break;
+					}
+					int bs = binarySearch(setU, b, k, c);
+					if (bs >= 0) {
+						System.out.println(setU[k]);
+						return;
+					}
+				}
 			}
 		}
-		Arrays.sort(twoSum);
+		
+	}
 
-		// k-z 찾기
-		for (int k = n - 1; k >= 0; k--) {
-			for (int z = 0; z < n; z++) {
-				int target = setU[k] - setU[z];
-				if (target <= 0) {
-					break;
-				}
-				int res = Arrays.binarySearch(twoSum, target);
-				if (res >= 0) {
-					System.out.println(setU[k]);
-					return;
-				}
+	static int binarySearch(int[] arr, int start, int end, int target) {
+		while (start <= end) {
+			int mid = (start + end) / 2;
+			if (arr[mid] == target) {
+				return mid;
 			}
+			if (arr[mid] > target) {
+				end = mid - 1;
+				continue;
+			}
+			start = mid + 1;
 		}
+		return -1;
 	}
 
 }
