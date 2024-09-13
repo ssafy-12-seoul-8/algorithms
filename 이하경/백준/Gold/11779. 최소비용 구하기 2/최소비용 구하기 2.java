@@ -19,7 +19,6 @@ public class Main {
         n = Integer.parseInt(br.readLine());
         m = Integer.parseInt(br.readLine());
 
-        // Node 1개당 int 2개, 최대 100,000개이므로 800kb
         nodes = new ArrayList[n + 1];
         for (int i = 1; i <= n; i++) {
             nodes[i] = new ArrayList<>();
@@ -30,7 +29,7 @@ public class Main {
             int from = Integer.parseInt(st.nextToken());
             int to = Integer.parseInt(st.nextToken());
             int weigh = Integer.parseInt(st.nextToken());
-            nodes[from].add(new Node(to, weigh));
+            nodes[from].add(new Node(from, to, weigh));
         }
 
         st = new StringTokenizer(br.readLine());
@@ -40,19 +39,19 @@ public class Main {
 
     static void dijkstra() {
         StringBuilder sb = new StringBuilder();
-        PriorityQueue<Node> pq = new PriorityQueue<>(); // 많이 들어가봤자 100,000개, 800kb
+        PriorityQueue<Node> pq = new PriorityQueue<>();
         int[] parent = new int[n + 1]; // 얘를 방문배열 겸 써야지
-        int[] dist = new int[n + 1]; // int배열 2개 8kb
-        Arrays.fill(dist, Integer.MAX_VALUE); // 최대 1000*100,000
-        dist[start] = 0;
-        pq.add(new Node(start, 0));
+        pq.addAll(nodes[start]);
+        parent[start] = start;
 
         while (!pq.isEmpty()) {
             Node curr = pq.poll();
 
-            if (curr.w > dist[curr.v]) {
+            if (parent[curr.v] != 0) {
                 continue;
             }
+
+            parent[curr.v] = curr.u;
 
             if (curr.v == end) {
                 sb.append(curr.w).append("\n");
@@ -60,19 +59,16 @@ public class Main {
             }
 
             for (Node next : nodes[curr.v]) {
-                if (dist[next.v] > curr.w + next.w) {
-                    dist[next.v] = curr.w + next.w;
-                    parent[next.v] = curr.v;
-                    pq.add(new Node(next.v, dist[next.v]));
-                }
+                pq.add(new Node(next.u, next.v, curr.w + next.w));
             }
         }
 
         Deque<Integer> stack = new ArrayDeque<>();
-        while (end != 0) {
+        while (end != start) {
             stack.push(end);
             end = parent[end];
         }
+        stack.push(start);
 
         sb.append(stack.size()).append("\n");
         while (!stack.isEmpty()) {
@@ -83,9 +79,10 @@ public class Main {
     }
 
     static class Node implements Comparable<Node> {
-        int v, w;
+        int u, v, w;
 
-        public Node(int v, int w) {
+        public Node(int u, int v, int w) {
+            this.u = u;
             this.v = v;
             this.w = w;
         }
