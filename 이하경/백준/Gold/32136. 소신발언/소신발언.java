@@ -4,45 +4,64 @@ import java.util.StringTokenizer;
 
 public class Main {
     static int n;
-    static int[] ice;
+    static int[] cows;
+    static long[] memo;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
-        ice = new int[n];
+
         st = new StringTokenizer(br.readLine());
+        cows = new int[n];
         for (int i = 0; i < n; i++) {
-            ice[i] = Integer.parseInt(st.nextToken());
+            cows[i] = Integer.parseInt(st.nextToken());
         }
 
-        System.out.println(binarySearch(1, 75_000_000_000L));
+        memo = new long[n];
+        System.out.println(search(0, n - 1));
+
     }
 
-    // canHeat한 최소 시간 구하기
-    public static long binarySearch(long start, long end) {
-        while (start < end) {
-            long mid = (start + end) / 2;
-            if (canHeat(mid)) { // mid시간에 다 녹일 수 있으면 큰쪽은 볼필요없다
-                end = mid;
+    // isMin이 되는 곳을 찾는다
+    public static long search(int start, int end) {
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            int minCheck = isMin(mid);
+            if (minCheck == 0) {
+                return calcTime(mid);
+            }
+            if (minCheck > 0) { // 오름차순이면 최소는 왼쪽에 있다
+                end = mid - 1;
                 continue;
             }
+            // 내림차순이면 최소는 오른쪽에 있다
             start = mid + 1;
         }
-        return start;
+        return -1;
     }
 
-    public static boolean canHeat(long mid) {
-        // 시간 내에 녹이려면 범위가 어디여야하는지 저장할건데
-        long leftMax = 0;
-        long rightMin = n - 1;
-
-        for (int i = 0; i < n; i++) {
-            long gap = mid / ice[i];
-            leftMax = Math.max(leftMax, i - gap);
-            rightMin = Math.min(rightMin, i + gap);
+    // 0이면 최소, 1이면 증가, -1이면 감소
+    public static int isMin(int idx) {
+        if (idx == 0 || calcTime(idx - 1) >= calcTime(idx)) { // 왼쪽이 더 크면
+            if (idx == n - 1 || calcTime(idx + 1) >= calcTime(idx)) { // 오른쪽이 더 크면
+                return 0;
+            }
+            return -1;
         }
-        return leftMax <= rightMin;
+        return 1;
+    }
+
+    // 300,000개가 모두 500,000이라면 최대 500,000 * 300,000
+    public static long calcTime(int idx) {
+        if (memo[idx] == 0) {
+            long max = 0;
+            for (int i = 0; i < n; i++) {
+                max = Math.max(max, (long) cows[i] * Math.abs(i - idx));
+            }
+            memo[idx] = max;
+        }
+        return memo[idx];
     }
 }
