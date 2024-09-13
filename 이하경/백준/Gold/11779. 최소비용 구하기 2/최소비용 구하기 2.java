@@ -42,12 +42,11 @@ public class Main {
         PriorityQueue<Node> pq = new PriorityQueue<>();
         int[] parent = new int[n + 1]; // 얘를 방문배열 겸 써야지
         pq.addAll(nodes[start]);
-        parent[start] = start;
 
         while (!pq.isEmpty()) {
             Node curr = pq.poll();
 
-            if (parent[curr.v] != 0) {
+            if (parent[curr.v] != 0 || curr.v == start) {
                 continue;
             }
 
@@ -64,11 +63,10 @@ public class Main {
         }
 
         Deque<Integer> stack = new ArrayDeque<>();
-        while (end != start) {
+        while (end != 0) {
             stack.push(end);
             end = parent[end];
         }
-        stack.push(start);
 
         sb.append(stack.size()).append("\n");
         while (!stack.isEmpty()) {
