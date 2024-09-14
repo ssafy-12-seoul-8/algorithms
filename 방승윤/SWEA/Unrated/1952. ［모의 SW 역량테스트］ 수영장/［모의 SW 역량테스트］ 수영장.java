@@ -1,13 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
-	
-	static int[] price = new int[4];
-	static int[][] month = new int[12][2];
-	static int cost;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -18,6 +13,9 @@ public class Solution {
 		
 		for (int tc = 1; tc <= T; tc++) {
 			
+			int[] price = new int[4];
+			int[][] month = new int[13][2];
+			
 			st = new StringTokenizer(br.readLine());
 			
 			for (int i = 0; i < 4; i++) {
@@ -26,42 +24,24 @@ public class Solution {
 			
 			st = new StringTokenizer(br.readLine());
 			
-			for (int i = 0; i < 12; i++) {
+			for (int i = 1; i <= 12; i++) {
 				month[i][0] = Integer.parseInt(st.nextToken());
-				month[i][1] = Math.min(price[0] * month[i][0], price[1]);
-				cost += month[i][1];
+				month[i][1] = month[i - 1][1] + Math.min(price[0] * month[i][0], price[1]);
+				
+				if (i >= 3) {
+					month[i][1] = Math.min(month[i][1], month[i - 3][1] + price[2]);
+				}
+				
+				if (i == 12) {
+					month[i][1] = Math.min(month[i][1], price[3]);
+				}
 			}
 			
-			findMin(0, 0);
-			
-			sb.append("#").append(tc).append(" ").append(cost).append("\n");
-			
-			cost = 0;
+			sb.append("#").append(tc).append(" ").append(month[12][1]).append("\n");
 			
 		}
 		
 		System.out.println(sb);
-		
-	}
-	
-	static void findMin(int idx, int sum) {
-		
-		if (sum > cost) {
-			return;
-		}
-		
-		if (idx >= 12) {
-			cost = Math.min(cost, sum);
-			return;
-		}
-		
-		if (month[idx][0] == 0) {
-			findMin(idx + 1, sum);			
-		} else {
-			findMin(idx + 1, sum + month[idx][1]);
-			findMin(idx + 3, sum + price[2]);
-			findMin(idx + 12, sum + price[3]);
-		} 
 		
 	}
 	
