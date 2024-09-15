@@ -58,6 +58,11 @@ public class Solution {
                 		temp[nr][nc][1] = microbe[j][2];
                 		microbe[j][0] = nr;
                     	microbe[j][1] = nc;
+                    	
+                    	if (microbe[j][0] == 0 || microbe[j][0] == N - 1 || microbe[j][1] == 0 || microbe[j][1] == N - 1) {
+                    		microbe[j][3] = (microbe[j][3] + 2) % 4;
+                    		microbe[j][2] /= 2;
+                    	}
                 	} else {
                 		microbe[temp[nr][nc][0]][2] += microbe[j][2];
                 		
@@ -67,14 +72,6 @@ public class Solution {
                 		}
                 		
                 		microbe[j][2] = 0;
-                		
-                	}
-                }
-                
-                for (int j = 0; j < K; j++) {                	
-                	if (microbe[j][0] == 0 || microbe[j][0] == N - 1 || microbe[j][1] == 0 || microbe[j][1] == N - 1) {
-                		microbe[j][3] = (microbe[j][3] + 2) % 4;
-                		microbe[j][2] /= 2;
                 	}
                 }
             }
