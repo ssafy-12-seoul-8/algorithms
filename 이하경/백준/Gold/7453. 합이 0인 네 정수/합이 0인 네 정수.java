@@ -1,101 +1,84 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-// n <= 4000, 시간제한 12초 -> n^3 풀이는 불가능
-// 두개씩 더해서 정렬하고 다른거 두개 더해서 이분탐색
-// 두개씩 더하는데 n^2 (1번), 정렬 n^2logn(1번), 나머지 두개 더하기 n^2번, 다른쪽에서 찾기 2logn
-// 메모리는 16,000,000 * 4 = 64mb
-
 public class Main {
-    static int n;
-    static int[] ab;
-    static int[][] abcd;
+    static int[] A, B, C, D;
+    static long[] caseAB, caseCD;
+    static int N;
 
-    public static void main(String[] args) throws Exception {
-        input();
-        solve();
+    static long[] makeCase(int[] arrA, int[] arrB) {
+        long[] result = new long[N * N];
+        int ptr = 0;
+
+        for (int a : arrA) {
+            for (int b : arrB) {
+                result[ptr ++] = a + b;
+            }
+        }
+        Arrays.sort(result);
+        return result;
     }
 
-    static void input() throws  Exception {
+    static long find(long[] caseAB, long[] caseCD) {
+        long answer = 0;
+        int left = 0, right = caseCD.length - 1;
+
+        while (left < caseAB.length && right >= 0) {
+            long sum = caseAB[left] + caseCD[right];
+            if (sum == 0) {
+                long leftVal = caseAB[left];
+                long cntLeft = 0;
+                while (left < caseAB.length && caseAB[left] == leftVal) {
+                    left ++;
+                    cntLeft ++;
+                }
+
+                long rightVal = caseCD[right];
+                long cntRight = 0;
+                while (right >= 0 && caseCD[right] == rightVal) {
+                    right --;
+                    cntRight ++;
+                }
+                answer += (cntLeft * cntRight);
+            } else if (sum < 0) {
+                left ++;
+            } else {
+                right --;
+            }
+        }
+
+        return answer;
+    }
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        n = Integer.parseInt(br.readLine());
 
-        abcd = new int[4][n];
-        for (int i = 0; i < n; i++) {
+        N = Integer.parseInt(br.readLine());
+        A = new int[N]; B = new int[N];
+        C = new int[N]; D = new int[N];
+
+        for (int i = 0; i < N; i ++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < 4; j++) {
-                abcd[j][i] = Integer.parseInt(st.nextToken());
-            }
+            A[i] = Integer.parseInt(st.nextToken());
+            B[i] = Integer.parseInt(st.nextToken());
+            C[i] = Integer.parseInt(st.nextToken());
+            D[i] = Integer.parseInt(st.nextToken());
         }
-    }
 
-    static void solve() throws Exception {
-        makeAB();
-        long cnt = 0; // 최대 개수는 4000^4 = 256e12
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                cnt += find(-abcd[2][i] - abcd[3][j]);
-            }
-        }
-        System.out.println(cnt);
-    }
+        Arrays.sort(A);
+        Arrays.sort(B);
+        Arrays.sort(C);
+        Arrays.sort(D);
 
-    static void makeAB() {
-        ab = new int[n * n];
+        caseAB = makeCase(A, B);
+        caseCD = makeCase(C, D);
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                ab[i * n + j] = abcd[0][i] + abcd[1][j];
-            }
-        }
-        Arrays.sort(ab);
-    }
+        long answer = find(caseAB, caseCD);
 
-    // 일치하는 ab가 여러개인 경우 그만큼 더해줘야함
-    static int find(int target) throws Exception {
-        int start = 0;
-        int end = n * n;
-
-        int repeat = 0;
-        // mid >= target인 최소 인덱스 찾기
-        while (start < end) {
-            repeat++;
-            if(repeat >= 30) {
-                throw new Exception("저 무한루프 돌아요?");
-            }
-            int mid = (start + end) / 2;
-            if (ab[mid] >= target) { // mid가 target보다 크거나같으면 정답은 mid포함 작은쪽
-                end = mid;
-                continue;
-            }
-            // mid가 target보다 작으면 정답은 mid보다 큰쪽에
-            start = mid + 1;
-        }
-        int lowerBound = start;
-
-        start = 0;
-        end = n * n;
-
-        repeat = 0;
-        // mid > target인 최소 인덱스 찾기
-        while (start < end) {
-            repeat++;
-            if(repeat >= 30) {
-                throw new Exception("저 무한루프 돌아요?");
-            }
-            int mid = (start + end) / 2;
-            if (ab[mid] <= target) { // mid가 target보다 작거나 같으면 정답은 mid보다 큰쪽
-                start = mid + 1;
-                continue;
-            }
-            // mid가 target보다 크면 정답은 mid 포함 작은쪽
-            end = mid;
-        }
-        int upperBound = start;
-
-        return upperBound - lowerBound;
+        System.out.println(answer);
     }
 }
