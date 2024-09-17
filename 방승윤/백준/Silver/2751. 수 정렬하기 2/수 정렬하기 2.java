@@ -1,29 +1,30 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.OutputStreamWriter;
 
 public class Main {
 	
     public static void main(String[] args) throws Exception {
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         
         int N = Integer.parseInt(br.readLine());
-        int[] arr = new int[N];
+        boolean[] arr = new boolean[2_000_001];
         
         for (int i = 0; i < N; i++) {
-        	arr[i] = Integer.parseInt(br.readLine());
+        	arr[Integer.parseInt(br.readLine()) + 1_000_000] = true;
         }
-        
-        Arrays.sort(arr);
-        
-        for (int i : arr) {
-        	sb.append(i).append("\n");
+
+        for (int i = 0; i <= 2_000_000; i++) {
+        	if (arr[i]) {
+        		bw.write(i - 1_000_000 + "\n");        		
+        	}
         }
-        
-        System.out.println(sb);
-        
+
+        bw.flush();
+
     }
-    
+
 }
