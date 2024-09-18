@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 public class Main {
     static int[] minsu, p;
@@ -18,13 +17,21 @@ public class Main {
 
         minsu = new int[m + 1];
         p = new int[m + 1]; // 나보다 크거나같은 다음수의 인덱스 저장
+        boolean[] cnt = new boolean[n + 1];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < m; i++) {
-            minsu[i] = Integer.parseInt(st.nextToken());
+            int min = Integer.parseInt(st.nextToken());
+            cnt[min] = true;
+        }
+
+        int idx = -1;
+        for (int i = 0; i <= n; i++) {
+            if (cnt[i]) {
+                minsu[++idx] = i;
+            }
         }
         minsu[m] = n;
-        Arrays.sort(minsu);
 
         for (int i = 1; i <= m; i++) {
             p[i] = i;
