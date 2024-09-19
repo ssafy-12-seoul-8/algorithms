@@ -10,53 +10,23 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
 
-        if (n == k) {
-            System.out.println(0);
+        if (n >= k) {
+            System.out.println(n - k);
             return;
         }
 
-        Queue<Integer> q = new LinkedList<>();
-        int[] visit = new int[100_001];
-        q.add(n);
-        visit[n] = 1;
-
-        while (!q.isEmpty()) {
-            int curr = q.poll();
-
-            int next = curr * 2;
-            while (next <= 100_000 && visit[next] == 0) {
-                if (next == k) {
-                    System.out.println(visit[curr] - 1);
-                    return;
-                }
-                visit[next] = visit[curr];
-                q.add(next);
-                next *= 2;
-            }
-
-            if (curr > 0) {
-                next = curr - 1;
-                if (next == k) {
-                    System.out.println(visit[curr]);
-                    return;
-                }
-                if (visit[next] == 0) {
-                    visit[next] = visit[curr] + 1;
-                    q.add(next);
-                }
-            }
-
-            if (curr < 100_000) {
-                next = curr + 1;
-                if (next == k) {
-                    System.out.println(visit[curr]);
-                    return;
-                }
-                if (visit[next] == 0) {
-                    visit[next] = visit[curr] + 1;
-                    q.add(next);
-                }
-            }
+        int[] dp = new int[k + 1];
+        for (int i = 0; i < n; i++) {
+            dp[i] = n - i;
         }
+        for (int i = n + 1; i <= k; i++) {
+            dp[i] = dp[i - 1] + 1;
+            if (i % 2 == 0) {
+                dp[i] = Math.min(dp[i], dp[i >> 1]); // i는 1 이상
+            }
+            dp[i] = Math.min(dp[i], dp[(i - 1) >> 1] + 1);
+            dp[i] = Math.min(dp[i], dp[(i + 1) >> 1] + 1);
+        }
+        System.out.println(dp[k]);
     }
 }
