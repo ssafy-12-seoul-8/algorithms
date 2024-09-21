@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -15,23 +13,20 @@ public class Main {
         StringTokenizer st;
         
         int N = Integer.parseInt(br.readLine());
-        String[][] guest = new String[N][2];
+        StringBuilder[] sb = new StringBuilder[201];
+
+        for (int i = 0; i < sb.length; i++) {
+        	sb[i] = new StringBuilder();
+        }
         
         for (int i = 0; i < N; i++) {
         	st = new StringTokenizer(br.readLine());
-        	guest[i][0] = st.nextToken();
-        	guest[i][1] = st.nextToken();
+        	int age = Integer.parseInt(st.nextToken());
+        	sb[age].append(age).append(" ").append(st.nextToken()).append("\n");
         }
         
-        Arrays.sort(guest, new Comparator<String[]>() {
-			@Override
-			public int compare(String[] o1, String[] o2) {
-				return Integer.parseInt(o1[0]) - Integer.parseInt(o2[0]);
-			}
-		});
-        
-        for (int i = 0; i < N; i++) {
-        	bw.write(guest[i][0] + " " + guest[i][1] + "\n");
+        for (int i = 1; i <= 200; i++) {
+        	bw.write(sb[i].toString());
         }
         
         bw.flush();
