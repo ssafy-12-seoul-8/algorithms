@@ -65,7 +65,9 @@ public class Main {
             cnt++;
 
             for (Node next : nodes[curr.v]) {
-                pq.add(new Node(next.v, curr.w + next.w));
+                if (!visit[next.v]) {
+                    pq.add(new Node(next.v, curr.w + next.w));
+                }
             }
         }
 
