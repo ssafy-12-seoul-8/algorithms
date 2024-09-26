@@ -69,7 +69,9 @@ public class Solution {
                     pick++;
                 }
                 
-                if (pick == (N - 1));
+                if (pick == (N - 1)) {
+                	break;
+                }
             }
             
             st = new StringTokenizer(br.readLine());
