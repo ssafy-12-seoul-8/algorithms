@@ -31,55 +31,52 @@ public class Main {
 			edge[a][b] = true;
 			edge[b][a] = true;
 		}
-		
-		visited[V] = true;
-		
+
 		dfs(V);
-		
+
 		sb.append("\n");
-		
+
 		Arrays.fill(visited, false);
-		
+
+		visited[V] = true;
+
 		bfs(V);
-		
+
 		System.out.println(sb);
 
 	}
 
 	static void dfs(int curr) {
-		
+
 		sb.append(curr).append(" ");
-		
+
 		visited[curr] = true;
-		
+
 		for (int i = 1; i <= N; i++) {
 			if (edge[curr][i] && !visited[i]) {
 				dfs(i);
 			}
 		}
-		
+
 	}
-	
+
 	static void bfs(int curr) {
-		
+
 		sb.append(curr).append(" ");
-		
+
 		visited[curr] = true;
-		
+
 		for (int i = 1; i <= N; i++) {
 			if (edge[curr][i] && !visited[i]) {
 				queue.offer(i);
+				visited[i] = true;
 			}
 		}
-		
+
 		while (!queue.isEmpty()) {
-			int temp = queue.poll();
-			
-			if (!visited[temp]) {
-				bfs(temp);
-			}
+			bfs(queue.poll());
 		}
-		
+
 	}
 
 }
