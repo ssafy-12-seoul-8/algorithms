@@ -11,18 +11,15 @@ public class Main {
 
 		int N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
-		int[] coin = new int[N];
 		int[] cnt = new int[K + 1];
 		
 		cnt[0] = 1;
 
 		for (int i = 0; i < N; i++) {
-			coin[i] = Integer.parseInt(br.readLine());
-		}
-		
-		for (int i = 0; i < N; i++) {
-			for (int j = coin[i]; j <= K; j++) {
-				cnt[j] +=  cnt[j - coin[i]];
+			int coin = Integer.parseInt(br.readLine());
+			
+			for (int j = coin; j <= K; j++) {
+				cnt[j] +=  cnt[j - coin];
 			}
 		}
 		
