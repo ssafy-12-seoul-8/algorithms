@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
 public class Main {
 
@@ -20,13 +18,12 @@ public class Main {
 			queue.offer(i);
 		}
 		
-		while (!queue.isEmpty()) {
-			sb = new StringBuilder();
-			sb.append(queue.poll());
-			if (!queue.isEmpty()) {
-				queue.offer(queue.poll());
-			}
+		while (queue.size() > 1) {
+			queue.poll();
+			queue.add(queue.poll());
 		}
+		
+		sb.append(queue.poll());
 		
 		System.out.println(sb);
 
