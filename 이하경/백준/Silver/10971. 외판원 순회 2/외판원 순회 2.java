@@ -29,6 +29,10 @@ public class Main {
 	}
 
 	static void bt(int visitCnt, int visitBit, int costSum, int prev, int start) {
+		if (costSum >= minCost) {
+			return;
+		}
+		
 		if (visitCnt == n) {
 			if (cost[prev][start] != 0) {
 				minCost = Math.min(minCost, costSum + cost[prev][start]);
