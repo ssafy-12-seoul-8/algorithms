@@ -17,17 +17,15 @@ public class Main {
 		
 		prime[1] = true;
 		
-		for (int i = 2; i * i <= N; i++) {
-			if (prime[i] == false) {
+		for (int i = 2; i <= N; i++) {
+			if (!prime[i]) {
+				if (i >= M) {
+					sb.append(i).append(" ");
+				}
+				
 				for (int j = i + i; j <= N; j += i) {
 					prime[j] = true;
 				}
-			}
-		}
-		
-		for (int i = M; i <= N; i++) {
-			if (prime[i] == false) {
-				sb.append(i).append(" ");
 			}
 		}
 		
