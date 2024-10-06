@@ -20,7 +20,7 @@ public class Main {
 		for (int i = 2; i <= N; i++) {
 			if (!prime[i]) {
 				if (i >= M) {
-					sb.append(i).append(" ");
+					sb.append(i).append("\n");
 				}
 				
 				for (int j = i + i; j <= N; j += i) {
