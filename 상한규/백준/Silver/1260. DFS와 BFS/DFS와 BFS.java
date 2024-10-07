@@ -35,32 +35,32 @@ public class Main {
 		}
 		
 		// dfs with stack
-		stack.push(V);
-		
-		while(!stack.isEmpty()) {
-			int current = stack.pop();
-			
-			ArrayList<Integer> node = graph[current];
-
-			if(!visited[current]) {
-				visited[current] = true;
-				sb.append(current).append(" ");
-				
-				for(int i = node.size() - 1; i >= 0; i--){
-					if(!visited[node.get(i)]) {
-						
-						stack.push(node.get(i));
-					}
-				}
-			}
-		}
-		
-		System.out.println(sb);
+//		stack.push(V);
+//		
+//		while(!stack.isEmpty()) {
+//			int current = stack.pop();
+//			
+//			ArrayList<Integer> node = graph[current];
+//
+//			if(!visited[current]) {
+//				visited[current] = true;
+//				sb.append(current).append(" ");
+//				
+//				for(int i = node.size() - 1; i >= 0; i--){
+//					if(!visited[node.get(i)]) {
+//						
+//						stack.push(node.get(i));
+//					}
+//				}
+//			}
+//		}
+//		
+//		System.out.println(sb);
 		
 		// dfs with recur
-//		sb = new StringBuilder();
-//		dfs(V, new boolean[N + 1], graph, sb);
-//		System.out.println(sb);
+		sb = new StringBuilder();
+		dfs(V, new boolean[N + 1], graph, sb);
+		System.out.println(sb);
 		
 		
 		
