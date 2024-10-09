@@ -20,15 +20,14 @@ public class Main {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 
-		while (K > 0) {
+		for (int i = 0; i < K; i++) {
 			N--;
 			
-			for (int i = 0; i < N; i++) {
-				arr[i] = arr[i + 1] - arr[i];
+			for (int j = 0; j < N; j++) {
+				arr[j] = arr[j + 1] - arr[j];
 			}
-			
-			K--;
 		}
+			
 		
 		for (int i = 0; i < N; i++) {
 			sb.append(arr[i]);
