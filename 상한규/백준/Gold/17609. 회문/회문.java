@@ -34,17 +34,12 @@ public class Main {
 		if(frontChar == rearChar) {
 			check(front + 1, rear - 1, count);
 		} else {
-			if(word.charAt(front + 1) == rearChar && word.charAt(rear - 1) == frontChar) {
+			if(word.charAt(front + 1) == rearChar) {
 				check(front + 2, rear - 1, count + 1);
-				check(front + 1, rear - 2, count + 1);
-			} else if(word.charAt(front + 1) == rearChar) {
-				check(front + 2, rear - 1, count + 1);
-			} else if(word.charAt(rear - 1) == frontChar) {
-				check(front + 1, rear - 2, count + 1);
-			} else {
-				checkCount = Math.min(checkCount, 2);
-				return ;
 			}
+			if(word.charAt(rear - 1) == frontChar) {
+				check(front + 1, rear - 2, count + 1);
+			} 
 		}
 	}
 }
