@@ -41,6 +41,8 @@ public class Main {
 				check(front + 2, rear - 1, count + 1);
 			} else if(word.charAt(rear - 1) == frontChar) {
 				check(front + 1, rear - 2, count + 1);
+			} else {
+				checkCount = Math.min(checkCount, 2);
 			}
 		}
 	}
