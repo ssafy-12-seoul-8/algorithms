@@ -43,6 +43,7 @@ public class Main {
 				check(front + 1, rear - 2, count + 1);
 			} else {
 				checkCount = Math.min(checkCount, 2);
+				return ;
 			}
 		}
 	}
