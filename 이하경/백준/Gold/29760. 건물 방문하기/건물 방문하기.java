@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,69 +11,44 @@ public class Main {
         int h = Integer.parseInt(st.nextToken());
         int w = Integer.parseInt(st.nextToken());
 
-        boolean[][] visit = new boolean[h + 1][w + 1];
+        int[][] room = new int[h + 1][2]; // 맨 왼쪽과 오른쪽 방만 저장
+        for (int i = 1; i <= h; i++) {
+            room[i][0] = 101;
+            room[i][1] = 0;
+        }
+
         while (n-- > 0) {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-            visit[x][y] = true;
+            room[x][0] = Math.min(room[x][0], y);
+            room[x][1] = Math.max(room[x][1], y);
         }
+        room[1][0] = 1;
 
-        int[][] dp = new int[h + 1][w + 1]; // dp[i][j] => i층을 다 돌고 j번방에서 끝날때 시간
-
-        for (int i = 1; i < w; i++) {
-            dp[0][i + 1] = i;
-        }
+        int[] dp = new int[2]; // 한 층을 다 돌고 왼쪽/오른쪽에서 끝날때 시간
+        int[] nextDp = new int[2];
+        int left = 1;
+        int right = 1; // 0층 1호에서 시작한다고 가정, 시간은 0
 
         int maxHeight = 1;
         for (int i = 1; i <= h; i++) { // 한 층에서 움직임
-
-            int left = 0;
-            for (int j = 1; j <= w; j++) {
-                if (visit[i][j]) {
-                    left = j;
-                    break;
-                }
-            }
-            if (left == 0) { // 이 층엔 가고싶은 방이 없어
-                for (int j = 1; j <= w; j++) {
-                    dp[i][j] = dp[i - 1][j];
-                }
+            if (room[i][0] == 101) { // 이 층엔 가고싶은 방이 없어
                 continue;
             }
+
             maxHeight = i;
 
-            int right = 0;
-            for (int j = w; j >= 1; j--) {
-                if (visit[i][j]) {
-                    right = j;
-                    break;
-                }
-            }
-
-            int gap = right - left;
-            for (int j = 1; j <= w; j++) { // 호수
-                int minTime = Integer.MAX_VALUE;
-                for (int k = 1; k <= w; k++) { // 아랫층 호수
-                    if (j > k) {
-                        int tmp = dp[i - 1][k] + gap + Math.abs(k - left) + Math.abs(j - right);
-                        minTime = Math.min(minTime, tmp);
-                    } else {
-                        int tmp = dp[i - 1][k] + gap + Math.abs(j - left) + Math.abs(k - right);
-                        minTime = Math.min(minTime, tmp);
-                    }
-                }
-                dp[i][j] = minTime;
-            }
+            int gap = room[i][1] - room[i][0];
+            // 왼쪽방은 왼->오->왼 또는 오->오->왼
+            nextDp[0] = Math.min(dp[0] + Math.abs(left - room[i][1]), dp[1] + Math.abs(right - room[i][1])) + gap;
+            nextDp[1] = Math.min(dp[0] + Math.abs(left - room[i][0]), dp[1] + Math.abs(right - room[i][0])) + gap;
+            left = room[i][0];
+            right = room[i][1];
+            dp[0] = nextDp[0];
+            dp[1] = nextDp[1];
         }
 
-        int minTime = Integer.MAX_VALUE;
-        for (int i = 1; i <= w; i++) {
-            if (visit[maxHeight][i]) {
-                minTime = Math.min(minTime, dp[maxHeight][i]);
-            }
-        }
-
-        System.out.println(minTime + 100 * (maxHeight - 1));
+        System.out.println(Math.min(dp[0], dp[1]) + 100 * (maxHeight - 1));
     }
 }
