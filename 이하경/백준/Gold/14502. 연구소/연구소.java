@@ -1,4 +1,3 @@
-
 // 1. 벽 위치 결정하기. 64C3 = 41,664 가지 경우 0~n*n 까지 숫자로 
 // 2. 안전 영역 크기 구하기 - 바이러스 위치, 벽과 바이러스 개수 저장해두고 탐색
 
@@ -10,7 +9,7 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int n, m, empty, maxSafe; // empty는 0의 개수
+	static int n, m, empty, maxSafe, size; // empty는 0의 개수
 	static int[][] map;
 	static int[] wall;
 	static int[] dx = { 1, -1, 0, 0 };
@@ -29,6 +28,7 @@ public class Main {
 
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
+		size = n * m;
 		empty = -3;
 		maxSafe = 0;
 
@@ -56,10 +56,11 @@ public class Main {
 			return;
 		}
 
-		int cap = n * m - 2 + pick;
-		for (int i = start; i < cap; i++) {
-			wall[pick] = i;
-			combination(i + 1, pick + 1);
+		for (int i = start; i < size; i++) {
+			if (map[i / m][i % m] == 0) {
+				wall[pick] = i;
+				combination(i + 1, pick + 1);
+			}
 		}
 	}
 
