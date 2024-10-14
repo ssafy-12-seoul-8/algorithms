@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -11,23 +9,20 @@ public class Main {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), "-");
-		Queue<Integer> queue = new LinkedList<>();
+		StringTokenizer stNum = new StringTokenizer(st.nextToken(), "+");
+		int ans = 0;
 		
-		while (st.hasMoreTokens()) {
-			StringTokenizer stNum = new StringTokenizer(st.nextToken(), "+");
-			int num = 0;
-			
-			while (stNum.hasMoreTokens()) {
-				num += Integer.parseInt(stNum.nextToken());
-			}
-			
-			queue.add(num);
+		while (stNum.hasMoreTokens()) {
+			ans += Integer.parseInt(stNum.nextToken());
 		}
 		
-		int ans = queue.poll();
-		
-		for (int num : queue) {
-			ans -= num;
+		while (st.hasMoreTokens()) {
+			stNum = new StringTokenizer(st.nextToken(), "+");
+			
+			while (stNum.hasMoreTokens()) {
+				ans -= Integer.parseInt(stNum.nextToken());
+				
+			}
 		}
 		
 		System.out.println(ans);
