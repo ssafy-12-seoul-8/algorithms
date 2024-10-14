@@ -1,17 +1,16 @@
+
 // 1. 벽 위치 결정하기. 64C3 = 41,664 가지 경우 0~n*n 까지 숫자로 
 // 2. 안전 영역 크기 구하기 - 바이러스 위치, 벽과 바이러스 개수 저장해두고 탐색
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int n, m, empty, maxSafe, size; // empty는 0의 개수
+	static int n, m, wallCnt, maxSafe, tmp; // empty는 0의 개수
 	static int[][] map;
-	static int[] wall;
+	static boolean[][] visit;
 	static int[] dx = { 1, -1, 0, 0 };
 	static int[] dy = { 0, 0, 1, -1 };
 	static ArrayList<int[]> virus = new ArrayList<>();
@@ -28,19 +27,17 @@ public class Main {
 
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		size = n * m;
-		empty = -3;
+		wallCnt = 3;
 		maxSafe = 0;
 
 		map = new int[n][m];
-		wall = new int[3];
 
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if (map[i][j] == 0) {
-					empty++;
+				if (map[i][j] == 1) {
+					wallCnt++;
 					continue;
 				}
 				if (map[i][j] == 2) {
@@ -52,47 +49,38 @@ public class Main {
 
 	public static void combination(int start, int pick) {
 		if (pick == 3) {
-			maxSafe = Math.max(maxSafe, findSafeSize());
+			tmp = n * m - wallCnt;
+			visit = new boolean[n][m];
+			for (int[] v : virus) {
+				dfs(v[0], v[1]);
+			}
+			maxSafe = Math.max(maxSafe, tmp);
+
 			return;
 		}
 
-		for (int i = start; i < size; i++) {
+		int cap = n * m - 2 + pick;
+		for (int i = start; i < cap; i++) {
 			if (map[i / m][i % m] == 0) {
-				wall[pick] = i;
+				map[i / m][i % m] = 1;
 				combination(i + 1, pick + 1);
+				map[i / m][i % m] = 0;
 			}
 		}
 	}
 
-	public static int findSafeSize() {
-		int safeSize = empty;
-		Queue<int[]> q = new LinkedList<>();
-		boolean[][] visit = new boolean[n][m];
+	public static void dfs(int x, int y) {
+		visit[x][y] = true;
+		tmp--;
 
-		for (int[] point : virus) {
-			q.add(point);
-			visit[point[0]][point[1]] = true;
-		}
+		for (int d = 0; d < 4; d++) {
+			int nx = x + dx[d];
+			int ny = y + dy[d];
 
-		for (int w : wall) {
-			visit[w / m][w % m] = true;
-		}
-
-		while (!q.isEmpty()) {
-			int[] curr = q.poll();
-
-			for (int d = 0; d < 4; d++) {
-				int nx = curr[0] + dx[d];
-				int ny = curr[1] + dy[d];
-
-				if (inRange(nx, ny) && !visit[nx][ny] && map[nx][ny] == 0) {
-					visit[nx][ny] = true;
-					q.add(new int[] { nx, ny });
-					safeSize--;
-				}
+			if (inRange(nx, ny) && !visit[nx][ny] && map[nx][ny] == 0) {
+				dfs(nx, ny);
 			}
 		}
-		return safeSize;
 	}
 
 	public static boolean inRange(int x, int y) {
