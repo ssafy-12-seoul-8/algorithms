@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 public class Main {
 	
 	static int[] dwarf = new int[9];
+	static int total;
 	static boolean[] visitedDwarf = new boolean[9];
 	static StringBuilder sb = new StringBuilder();
 	static boolean find;
@@ -14,6 +15,7 @@ public class Main {
 		
 		for (int i = 0; i < 9; i++) {
 			dwarf[i] = Integer.parseInt(br.readLine());
+			total += dwarf[i];
 		}
 		
 		findReal(0, 0);
@@ -28,9 +30,9 @@ public class Main {
 			return;
 		}
 
-		if (idx == 7 && sum == 100) {
+		if (idx == 2 && total - sum == 100) {
 			for (int i = 0; i < 9; i++) {
-				if (visitedDwarf[i]) {
+				if (!visitedDwarf[i]) {
 					sb.append(dwarf[i]).append("\n");
 				}
 			}
@@ -38,7 +40,7 @@ public class Main {
 			find = true;
 			
 			return;
-		} else if (sum > 100 || idx == 7) {
+		} else if (idx == 2) {
 			return;
 		}
 		
