@@ -26,7 +26,7 @@ public class Main {
         }
 
         Arrays.sort(A);
-        
+
         M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
         checks = new int[M];
@@ -37,32 +37,9 @@ public class Main {
         
 
         for(int value : checks) {
-            boolean isExist = binarySearch(value);
+            boolean isExist = Arrays.binarySearch(A, value) > -1;
             
             System.out.println(isExist ? 1 : 0);
         }
-    }
-    
-    static boolean binarySearch(int target) {
-        int start = 0;
-        int end = N - 1;
-        boolean isExist = false;
-
-        while(start <= end) {
-            int mid = (end + start) / 2;
-            if(A[mid] == target) {
-                isExist = true;
-
-                break;
-            } else {
-                if(target > A[mid]) {
-                    start = mid + 1;
-                } else {
-                    end = mid - 1;
-                }
-            }
-        }
-
-        return isExist;
     }
 }
