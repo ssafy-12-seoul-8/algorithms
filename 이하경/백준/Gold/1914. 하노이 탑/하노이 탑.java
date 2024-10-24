@@ -13,25 +13,12 @@ public class Main {
 
 		// 2의 100제곱을 어떻게 출력할까? long은 2의 60제곱정도
 		// double은 매우 큰 숫자에 대해 얼마나 정밀한가?
-		System.out.println(pow(n).subtract(new BigInteger("1")));
+		System.out.println(two.pow(n).subtract(new BigInteger("1")));
 
 		if (n <= 20) {
 			hanoi(n, 1, 3, 2);
 			System.out.println(sb);
 		}
-	}
-
-	public static BigInteger pow(int n) {
-		if (n <= 31) {
-			return BigInteger.valueOf((long) Math.pow(2, n));
-		}
-		
-		BigInteger res = pow(n / 2);
-		if (n % 2 == 1) {
-			return res.multiply(res).multiply(two);
-		}
-		
-		return res.multiply(res);
 	}
 
 	public static void hanoi(int n, int from, int to, int tmp) {
