@@ -29,6 +29,7 @@ public class Main {
 			for (int j = 0; j < M; j++) {
 				if (campus[i][j].equals("I")) {
 					find(i, j);
+                    break;
 				}
 			}
 		}
