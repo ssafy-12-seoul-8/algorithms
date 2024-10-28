@@ -9,7 +9,7 @@ public class Main {
 		
 		int Q = Integer.parseInt(st.nextToken());
 		int mod = Integer.parseInt(st.nextToken());
-		Stack<Integer> mainStack = new Stack<>();
+		int size = 0;
 		Stack<Integer>[] stackArray = new Stack[mod];
 		StringBuilder sb = new StringBuilder();
 		
@@ -26,38 +26,40 @@ public class Main {
 					int num = Integer.parseInt(st.nextToken());
 					int remain = num % mod;
 					
-					stackArray[remain].push(mainStack.size());
-					mainStack.push(remain);
-					
+					stackArray[remain].push(size++);
+
 					break;
 				}
 				case 2: {
-					if(!mainStack.isEmpty()) {
-						int remain = mainStack.pop();
-						
-						stackArray[remain].pop();
+					for(int j = 0; j < mod; j++) {
+						if(!stackArray[j].isEmpty() && stackArray[j].peek() == (size - 1)) {
+							stackArray[j].pop();
+							size--;
+							
+							break;
+						}
 					}
 					
 					break;
 				}
 				case 3: {
-					int index = Integer.MAX_VALUE;
+					int value = Integer.MAX_VALUE;
 					
 					for(int j = 0; j < mod; j++) {
 						if(stackArray[j].isEmpty()) {
-							index = -1;
+							value = -1;
 							
 							break;
 						} else {
-							index = Math.min(index, stackArray[j].peek());
+							value = Math.min(value, stackArray[j].peek());
 						}
 					}
 					
-					if(index != -1) {
-						index = mainStack.size() - index;
+					if(value != -1) {
+						value = size - value;
 					}
 
-					sb.append(index).append("\n");
+					sb.append(value).append("\n");
 					break;
 				}
 			}
