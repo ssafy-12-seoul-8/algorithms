@@ -71,20 +71,25 @@ public class Main {
 			int nx = x + dx[d];
 			int ny = y + dy[d];
 
-			if (isValid(nx, ny)) { // 이 방향으로 갈 수 있을때
-				char[][] tmp = copyBoard(board); // 기존 보드는 복사해놓고
-
+			if (isValid(nx, ny) && board[nx][ny] == '.') { // 이 방향으로 갈 수 있을때
 				int tmpCnt = 0;
-				while (isValid(nx, ny)) {
+				while (isValid(nx, ny) && board[nx][ny] == '.') {
 					board[nx][ny] = '*';
 					tmpCnt++;
 					nx += dx[d];
 					ny += dy[d];
 				}
 
-				move(nx - dx[d], ny - dy[d], move + 1, cnt + tmpCnt); // 다음 방향으로 가보자!
+				nx -= dx[d];
+				ny -= dy[d];
 
-				board = tmp; // board 복구
+				move(nx, ny, move + 1, cnt + tmpCnt); // 다음 방향으로 가보자!
+
+				while (nx != x || ny != y) {
+					board[nx][ny] = '.';
+					nx -= dx[d];
+					ny -= dy[d];
+				}
 			}
 
 
@@ -93,18 +98,6 @@ public class Main {
 	}
 
 	static boolean isValid(int x, int y) {
-		return x >= 0 && x < n && y >= 0 && y < m && board[x][y] == '.';
-	}
-
-	static char[][] copyBoard(char[][] board) {
-		char[][] tmp = new char[board.length][board[0].length];
-
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				tmp[i][j] = board[i][j];
-			}
-		}
-
-		return tmp;
+		return x >= 0 && x < n && y >= 0 && y < m;
 	}
 }
