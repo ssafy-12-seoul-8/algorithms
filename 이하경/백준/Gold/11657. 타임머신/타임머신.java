@@ -26,23 +26,30 @@ public class Main {
         }
 
         long[] dist = new long[n + 1];
-//        int INF = 5_000_000; // 최대 10,000*500
-        Arrays.fill(dist, Long.MAX_VALUE);
+        int INF = 5_000_000; // 최대 10,000*500
+        Arrays.fill(dist, INF);
         dist[1] = 0; // 1에서 시작
         for (int i = 1; i < n; i++) { // n-1번 반복
+            boolean updated = false;
+
             for (Edge e : graph) { // 모든 간선을 확인하는데
-                if (dist[e.u] == Long.MAX_VALUE) { // i번 안에 시작점에 못오면 pass
+                if (dist[e.u] == INF) { // i번 안에 시작점에 못오면 pass
                     continue;
                 }
 
                 if (dist[e.v] > dist[e.u] + e.w) {
                     dist[e.v] = dist[e.u] + e.w;
+                    updated = true;
                 }
+            }
+
+            if (!updated) {
+                break;
             }
         }
 
         for (Edge e : graph) {
-            if (dist[e.u] == Long.MAX_VALUE) {
+            if (dist[e.u] == INF) {
                 continue;
             }
 
@@ -53,7 +60,7 @@ public class Main {
         }
 
         for (int i = 2; i <= n; i++) {
-            sb.append(dist[i] == Long.MAX_VALUE ? -1 : dist[i]).append("\n");
+            sb.append(dist[i] == INF ? -1 : dist[i]).append("\n");
         }
 
         System.out.println(sb);
