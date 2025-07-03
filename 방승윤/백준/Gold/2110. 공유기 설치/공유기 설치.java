@@ -20,8 +20,7 @@ public class Main {
         Arrays.sort(x);
 
         int l = Integer.MAX_VALUE;
-        int r = x[N - 1] - x[0];
-        int m = 0;
+        int r = (x[N - 1] - x[0]) / (C - 1);
 
         for (int i = 1; i < N; i++) {
             l = Math.min(x[i] - x[i - 1], l);
@@ -30,11 +29,11 @@ public class Main {
         int ans = 0;
 
         while (l <= r) {
-            m = (l + r) / 2;
+            int m = (l + r) / 2;
             int cnt = 1;
             int s = x[0];
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 1; i < N; i++) {
                 if (x[i] - s >= m) {
                     cnt++;
                     s = x[i];
