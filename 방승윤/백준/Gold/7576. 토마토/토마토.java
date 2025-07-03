@@ -16,19 +16,14 @@ public class Main {
         int[] dr = {0, 1, 0, -1};
         int[] dc = {1, 0, -1, 0};
         int d = 0;
+        Queue<int[]> q = new LinkedList<>();
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
 
             for (int j = 0; j < M; j++) {
                 box[i][j] = Integer.parseInt(st.nextToken());
-            }
-        }
 
-        Queue<int[]> q = new LinkedList<>();
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
                 if (box[i][j] == 1) {
                     q.add(new int[]{i, j, 0});
                 }
