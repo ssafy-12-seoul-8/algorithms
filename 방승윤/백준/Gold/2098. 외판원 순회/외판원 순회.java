@@ -8,7 +8,6 @@ class Main {
     static int N;
     static int[][] W;
     static int[][] dp;
-    static int min = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,36 +29,29 @@ class Main {
         }
 
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < (1 << N); j++) {
-                dp[i][j] = 100_000_000;
-            }
+            Arrays.fill(dp[i], -1);
         }
 
-        dp[0][1] = 0;
-
-        tsp(1, 0);
-
-        System.out.println(min);
+        System.out.println(tsp(1, 0));
     }
 
-    public static void tsp(int mask, int curr) {
+    public static int tsp(int mask, int curr) {
         if (mask == (1 << N) - 1) {
-            if (W[curr][0] != 0) {
-                min = Math.min(min, dp[curr][mask] + W[curr][0]);
-            }
-
-            return;
+            return W[curr][0];
         }
+
+        if (dp[curr][mask] != -1) {
+            return dp[curr][mask];
+        }
+
+        int min = 100_000_000;
 
         for (int i = 0; i < N; i++) {
             if ((mask & (1 << i)) == 0) {
-                if (dp[i][mask + (1 << i)] <= dp[curr][mask] + W[curr][i]) {
-                    continue;
-                }
-
-                dp[i][mask + (1 << i)] = dp[curr][mask] + W[curr][i];
-                tsp(mask + (1 << i), i);
+                min = Math.min(min, W[curr][i] + tsp(mask + (1 << i), i));
             }
         }
+
+        return dp[curr][mask] = min;
     }
 }
