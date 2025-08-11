@@ -1,5 +1,3 @@
-import org.w3c.dom.Node;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -49,22 +47,13 @@ class Main {
         st = new StringTokenizer(br.readLine());
         int v1 = Integer.parseInt(st.nextToken());
         int v2 = Integer.parseInt(st.nextToken());
-        int a = dijkstra(1, v1);
-        int b = dijkstra(v1, v2);
-        int c = dijkstra(v2, N);
-        int d = dijkstra(1, v2);
-        int e = dijkstra(v2, v1);
-        int f = dijkstra(v1, N);
-        if ((a == 10_000_000 || b == 10_000_000 || c == 10_000_000) && (d == 10_000_000 || e == 10_000_000 || f == 10_000_000)) {
-            System.out.println(-1);
-        } else {
-            System.out.println(Math.min(a + b + c, d + e + f));
-        }
+        int path = Math.min(dijkstra(1, v1) + dijkstra(v1, v2) + dijkstra(v2, N), dijkstra(1, v2) + dijkstra(v2, v1) + dijkstra(v1, N));
+        System.out.println(path >= 100_000_000 ? -1 : path);
     }
 
     public static int dijkstra(int start, int end) {
         int[] dist = new int[N + 1];
-        Arrays.fill(dist, 10_000_000);
+        Arrays.fill(dist, 100_000_000);
         dist[start] = 0;
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.add(new Edge(start, 0));
