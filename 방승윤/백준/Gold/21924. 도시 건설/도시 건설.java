@@ -2,15 +2,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
 class Main {
+    static int[] p;
+
     static class Edge implements Comparable<Edge> {
+        int u;
         int v;
         int w;
 
-        Edge(int v, int w) {
+        Edge(int u, int v, int w) {
+            this.u = u;
             this.v = v;
             this.w = w;
         }
@@ -25,12 +30,7 @@ class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        ArrayList<Edge>[] conn = new ArrayList[N + 1];
-
-        for (int i = 1; i <= N; i++) {
-            conn[i] = new ArrayList<>();
-        }
-
+        List<Edge> conn = new ArrayList<>();
         long total = 0;
 
         for (int i = 0; i < M; i++) {
@@ -38,39 +38,37 @@ class Main {
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
-            conn[a].add(new Edge(b, c));
-            conn[b].add(new Edge(a, c));
+            conn.add(new Edge(a, b, c));
             total += c;
         }
 
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
-        pq.add(new Edge(1, 0));
-        boolean[] visited = new boolean[N + 1];
-
-        while (!pq.isEmpty()) {
-            Edge curr = pq.poll();
-
-            if (visited[curr.v]) {
-                continue;
-            }
-
-            visited[curr.v] = true;
-            total -= curr.w;
-
-            for (Edge next : conn[curr.v]) {
-                if (!visited[next.v]) {
-                    pq.add(next);
-                }
-            }
-        }
+        Collections.sort(conn);
+        p = new int[N + 1];
 
         for (int i = 1; i <= N; i++) {
-            if (!visited[i]) {
-                System.out.println(-1);
-                return;
+            p[i] = i;
+        }
+
+        for (Edge e : conn) {
+            if (find(e.u) != find(e.v)) {
+                union(find(e.u), find(e.v));
+                total -= e.w;
+                N--;
             }
         }
 
-        System.out.println(total);
+        System.out.println(N == 1 ? total : -1);
+    }
+
+    static void union(int x, int y) {
+        p[y] = x;
+    }
+
+    static int find(int x) {
+        if (x == p[x]) {
+            return p[x];
+        }
+
+        return p[x] = find(p[x]);
     }
 }
