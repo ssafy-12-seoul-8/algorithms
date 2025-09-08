@@ -25,17 +25,13 @@ class Main {
         }
 
         Arrays.sort(alphabets);
-        recur(-1, 0, 0, 0);
+        recur(-1, 0,0);
         System.out.println(sb);
     }
 
-    public static void recur(int curr, int level, int consonant, int vowel) {
+    public static void recur(int curr, int level, int vowel) {
         if (level == L) {
-            if (consonant < 2) {
-                return;
-            }
-
-            if (vowel < 1) {
+            if (vowel < 1 || vowel > L - 2) {
                 return;
             }
 
@@ -53,12 +49,12 @@ class Main {
             char alphabet = alphabets[i];
 
             if (alphabet == 'a' || alphabet == 'e' || alphabet == 'i' || alphabet == 'o' || alphabet == 'u') {
-                recur(i, level + 1, consonant, vowel + 1);
+                recur(i, level + 1, vowel + 1);
                 visited[i] = false;
                 continue;
             }
 
-            recur(i, level + 1, consonant + 1, vowel);
+            recur(i, level + 1, vowel);
             visited[i] = false;
         }
     }
