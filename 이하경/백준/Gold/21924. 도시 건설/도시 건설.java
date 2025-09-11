@@ -35,13 +35,15 @@ public class Main {
         while (connected < n && !pq.isEmpty()) {
             Node curr = pq.poll();
 
-            if (find(curr.a, p) == find(curr.b, p)){
-                continue;
+            int px = find(curr.a, p);
+            int py = find(curr.b, p);
+
+            if (px != py) {
+                connected += 1;
+                cost += curr.cost;
+                union(px, py, p);
             }
 
-            connected += 1;
-            cost += curr.cost;
-            union(curr.a, curr.b, p);
         }
 
         if (connected < n) {
@@ -53,7 +55,7 @@ public class Main {
     }
 
     private static void union(int a, int b, int[] p) {
-        p[find(b, p)] = p[find(a, p)];
+        p[b] = a;
     }
 
     private static int find(int a, int[] p) {
