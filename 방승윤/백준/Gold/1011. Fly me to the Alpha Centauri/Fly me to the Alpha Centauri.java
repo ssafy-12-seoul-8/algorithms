@@ -9,40 +9,18 @@ class Main {
         StringBuilder sb = new StringBuilder();
         StringTokenizer st;
         int T = Integer.parseInt(br.readLine());
-        int[] move = new int[46341];
 
-        int sum = 0;
-
-        for (int i = 1; i < 46341; i++) {
-            sum += i * 2;
-            move[i] = sum;
-        }
-
-        one: for (int tc = 0; tc < T; tc++) {
+        for (int tc = 0; tc < T; tc++) {
             st = new StringTokenizer(br.readLine());
             int dist = -(Integer.parseInt(st.nextToken()) - Integer.parseInt(st.nextToken()));
+            int n = (int) Math.sqrt(dist);
 
-            int L = 0;
-            int R = 46340;
-
-            while (L <= R) {
-                int mid = (L + R) / 2;
-
-                if (move[mid] > dist) {
-                    R = mid - 1;
-                    continue;
-                }
-
-                if (move[mid] < dist) {
-                    L = mid + 1;
-                    continue;
-                }
-
-                sb.append(mid * 2).append("\n");
-                continue one;
+            if (dist == n * n) {
+                sb.append(n * 2 - 1).append("\n");
+                continue;
             }
 
-            sb.append(dist - move[R] > L ? R * 2 + 2 : R * 2 + 1).append("\n");
+            sb.append(dist - n * n > n ? n * 2 + 1 : n * 2).append("\n");
         }
 
         System.out.println(sb);
