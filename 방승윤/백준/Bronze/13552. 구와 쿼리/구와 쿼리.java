@@ -32,9 +32,9 @@ class Main {
             int cnt = 0;
 
             for (int j = 0; j < N; j++) {
-                long dx = Math.abs(dots[j][0] - x);
-                long dy = Math.abs(dots[j][1] - y);
-                long dz = Math.abs(dots[j][2] - z);
+                long dx = dots[j][0] - x;
+                long dy = dots[j][1] - y;
+                long dz = dots[j][2] - z;
                 long dSquare = dx * dx + dy * dy + dz * dz;
                 long rSquare = (long) r * r;
 
