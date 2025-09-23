@@ -64,6 +64,11 @@ class Main {
 
                 int nd = d + arr[nx][ny];
 
+                if (nx == N - 1 && ny == M - 1) {
+                    System.out.println(nd);
+                    return;
+                }
+
                 if (nd < dist[nx][ny]) {
                     dist[nx][ny] = nd;
 
