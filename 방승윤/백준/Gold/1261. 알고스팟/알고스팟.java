@@ -40,12 +40,12 @@ class Main {
             }
         }
 
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.add(new Node(0, 0, 0));
+        Deque<Node> deque = new ArrayDeque<>();
+        deque.addFirst(new Node(0, 0, 0));
         dist[0][0] = 0;
 
-        while (!pq.isEmpty()) {
-            Node curr = pq.poll();
+        while (!deque.isEmpty()) {
+            Node curr = deque.pollFirst();
             int x = curr.x;
             int y = curr.y;
             int d = curr.d;
@@ -66,7 +66,13 @@ class Main {
 
                 if (nd < dist[nx][ny]) {
                     dist[nx][ny] = nd;
-                    pq.add(new Node(nx, ny, nd));
+
+                    if (nd == d) {
+                        deque.addFirst(new Node(nx, ny, nd));
+                        continue;
+                    }
+
+                    deque.addLast(new Node(nx, ny, nd));
                 }
             }
         }
