@@ -1,0 +1,20 @@
+class Solution {
+    public int[] solution(String[] wallpaper) {
+        int lux, luy, rdx, rdy;
+        lux = luy = 50;
+        rdx = rdy = 0;
+        for (int i = 0; i < wallpaper.length; i++) {
+            String line = wallpaper[i];
+            for (int j = 0; j < line.length(); j++) {
+                if (line.charAt(j) == '#') {
+                    lux = Math.min(lux, i);
+                    luy = Math.min(luy, j);
+                    rdx = Math.max(rdx, i);
+                    rdy = Math.max(rdy, j);
+                }
+            }
+        }
+        int[] answer = { lux, luy, rdx + 1, rdy + 1 };
+        return answer;
+    }
+}
