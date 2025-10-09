@@ -6,22 +6,11 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         int n = Integer.parseInt(br.readLine());
-        int k = 0;
-        boolean[] p = new boolean[50001];
 
-        for (int i = 2; i < p.length; i++) {
-            if (!p[i]) {
-                sb.append(i).append(" ");
-                k += 1;
-
-                if (k == n) {
-                    break;
-                }
-
-                for (int j = i * 2; j < p.length; j += i) {
-                    p[j] = true;
-                }
-            }
+        int k = 1;
+        for (int i = 0; i < n; i++) {
+            sb.append(k).append(" ");
+            k += 2;
         }
 
         System.out.println(sb);
