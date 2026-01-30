@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 // 점수 : 100,000*100 = 10,000,000 < int
 // 시간 : 3n = 300,000
 // 메모리 : 3*100,000*4 = 1,200,000 = 1.2MB
+// 안고르는 경우는 하나 건너뛰고 보면 되므로 따로 계산할 필요 없음
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -26,14 +27,18 @@ public class Main {
                 }
             }
 
-            int[][] score = new int[n][3];
+            int[][] score = new int[n][2];
             score[0][0] = sticker[0][0];
             score[0][1] = sticker[0][1];
 
-            for (int i = 1; i < n; i++) {
-                score[i][0] = Math.max(score[i - 1][1], score[i - 1][2]) + sticker[i][0];
-                score[i][1] = Math.max(score[i - 1][0], score[i - 1][2]) + sticker[i][1];
-                score[i][2] = Math.max(score[i - 1][0], score[i - 1][1]);
+            if (n > 1) {
+                score[1][0] = score[0][1] + sticker[1][0];
+                score[1][1] = score[0][0] + sticker[1][1];
+            }
+
+            for (int i = 2; i < n; i++) {
+                score[i][0] = Math.max(score[i - 1][1], score[i - 2][1]) + sticker[i][0];
+                score[i][1] = Math.max(score[i - 1][0], score[i - 2][0]) + sticker[i][1];
             }
 
             sb.append(Math.max(score[n - 1][0], score[n - 1][1])).append("\n"); // 마지막을 안고른건 무조건 둘보다 작음
