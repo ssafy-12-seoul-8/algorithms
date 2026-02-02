@@ -15,13 +15,18 @@ public class Main {
         while (t-- > 0) {
             int m = Integer.parseInt(br.readLine());
             int[] nums = new int[m];
-            int line = (m - 1) / 10 + 1;
 
-            for (int i = 0; i < line; i++) {
+            for (int i = 0; i < m / 10; i++) {
                 st = new StringTokenizer(br.readLine());
-                int tok = st.countTokens();
-                for (int j = 0; j < tok; j++) {
+                for (int j = 0; j < 10; j++) {
                     nums[i * 10 + j] = Integer.parseInt(st.nextToken());
+                }
+            }
+
+            if (m % 10 != 0) {
+                st = new StringTokenizer(br.readLine());
+                for (int i = 0; i < m % 10; i++) {
+                    nums[m - m % 10 + i] = Integer.parseInt(st.nextToken());
                 }
             }
 
