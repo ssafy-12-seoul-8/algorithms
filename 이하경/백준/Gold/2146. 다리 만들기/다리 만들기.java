@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -13,7 +13,7 @@ public class Main {
     static int[] dy = { 0, 0, 1, -1 };
     static int n;
     static int[][] map;
-    static ArrayList<ArrayList<int[]>> sides = new ArrayList<>();
+    static Queue<int[]> sides = new LinkedList<>();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,28 +34,18 @@ public class Main {
             for (int j = 0; j < n; j++) {
                 if (map[i][j] == 1) {
                     map[i][j] = isLand++;
-                    sides.add(new ArrayList<>());
                     fillBfs(i, j);
                 }
             }
         }
 
         int minLen = 200;
-        for (int i = 0; i < isLand - 2; i++) {
-            for (int j = i + 1; j < isLand - 2; j++) {
-                for (int[] s:sides.get(i)) {
-                    for (int[] e:sides.get(j)) {
-                        minLen = Math.min(minLen, getDist(s, e));
-                    }
-                }
-            }
+        while (!sides.isEmpty()) {
+            int[] poll = sides.poll();
+            minLen = findBfs(poll[0], poll[1], minLen);
         }
 
         System.out.println(minLen);
-    }
-
-    static int getDist (int[] s, int[] e) {
-        return Math.abs(s[0] - e[0]) + Math.abs(s[1] - e[1]) - 1;
     }
 
     // 같은 섬을 표시
@@ -81,7 +71,7 @@ public class Main {
             }
 
             if (side) {
-                sides.get(map[x][y] - 2).add(curr);
+                sides.add(curr);
             }
         }
     }
@@ -103,7 +93,7 @@ public class Main {
                 int nx = curr[0] + dx[d];
                 int ny = curr[1] + dy[d];
 
-                if (nx >= 0 && nx < n && ny >= 0 && ny < n) {
+                if (nx >= 0 && nx < n && ny >= 0 && ny < n && !visit[nx][ny]) {
                     if (map[nx][ny] == 0) {
                         visit[nx][ny] = true;
                         q.add(new int[]{ nx, ny, curr[2] + 1 });
