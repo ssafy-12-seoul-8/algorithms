@@ -1,20 +1,16 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 public class Main {
-    static int[][] mat;
-    static int[][] dp;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         int n = Integer.parseInt(br.readLine());
-        mat = new int[n][2];
-        dp =  new int[n][n]; // i에서 j까지 필요한 곱셈 연산 최솟값
+        int[][] mat = new int[n][2];
+        int[][] dp =  new int[n][n]; // i에서 j까지 필요한 곱셈 연산 최솟값
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -22,26 +18,19 @@ public class Main {
             mat[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        System.out.println(getMin(0, n - 1));
-    }
+        for (int seq = 1; seq < n; seq++) { // seq개 차이나는 애를 구하기
+            for (int i = 0; i < n - seq; i++) {
+                int j = i + seq;
+                int min = Integer.MAX_VALUE;
 
-    static int getMin(int from, int to) {
-        if (from == to) {
-            return 0;
-        }
-        if (from + 1 == to) {
-            return mat[from][0] * mat[from][1] * mat[to][1];
-        }
+                for (int k = i; k < j; k++) {
+                    min = Math.min(min, dp[i][k] + dp[k + 1][j] + mat[i][0] * mat[k][1] * mat[j][1]);
+                }
 
-        if (dp[from][to] != 0) {
-            return dp[from][to];
+                dp[i][j] = min;
+            }
         }
 
-        int min = Integer.MAX_VALUE;
-        for (int i = from; i < to; i++) {
-            min = Math.min(min, getMin(from, i) + getMin(i + 1, to) + mat[from][0] * mat[i][1] * mat[to][1]);
-        }
-
-        return dp[from][to] = min;
+        System.out.println(dp[0][n - 1]);
     }
 }
