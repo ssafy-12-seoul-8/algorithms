@@ -8,6 +8,7 @@ public class Main {
     static int r;
     static int c;
     static int[][] board;
+    static int[][] visit;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,6 +18,7 @@ public class Main {
         c = Integer.parseInt(st.nextToken());
 
         board = new int[r][c];
+        visit = new int[r][c];
         for (int i = 0; i < r; i++) {
             String str = br.readLine();
             for (int j = 0; j < c; j++) {
@@ -34,7 +36,8 @@ public class Main {
             int nr = cr + dr[d];
             int nc = cc + dc[d];
 
-            if (nr >= 0 && nr < r && nc >= 0 && nc < c && (bit & (1 << board[nr][nc])) == 0) {
+            if (nr >= 0 && nr < r && nc >= 0 && nc < c && (bit & (1 << board[nr][nc])) == 0 && visit[nr][nc] != (bit | (1 << board[nr][nc]))) {
+                visit[nr][nc] = bit | (1 << board[nr][nc]);
                 max = Math.max(max, bt(nr, nc, (bit | (1 << board[nr][nc]))));
             }
         }
