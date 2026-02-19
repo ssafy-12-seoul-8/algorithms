@@ -25,50 +25,47 @@ public class Main {
             }
 
             int maxBit = 1 << m;
-            int[][] lineCount = new int[n][maxBit];
-            int[][] maxCount = new int[n][maxBit];
+            int[] prevDp = new int[maxBit];
+            int[] currDp = new int[maxBit];
+            ArrayList<Integer>[] validBit = new ArrayList[n];
 
             for (int i = 0; i < n; i++) {
-                getAllBit(m, 0, lineCount[i], 0, room[i]);
+                validBit[i] = new ArrayList<>();
             }
 
-            maxCount[0] = lineCount[0];
-            for (int i = 0; i < n - 1; i++) {
-                int max = 0;
-                for (int j = 0; j < maxBit; j++) { // i번 줄
-                    if (lineCount[i][j] == 0 && j != 0) {
+            for (int i = 0; i < maxBit; i++) {
+                if ((i & (i << 1)) == 0 && (i & room[0]) == 0) {
+                    prevDp[i] = Integer.bitCount(i);
+                    validBit[0].add(i);
+                }
+            }
+
+            for (int i = 1; i < n; i++) {
+                for (int j = 0; j < maxBit; j++) {
+                    if ((j & (j << 1)) != 0 || ((j & room[i]) != 0)) {
                         continue;
                     }
-                    max = Math.max(max, maxCount[i][j]);
-                    int ban = (j * 2) | (j / 2);
-                    for (int k = 0; k < maxBit; k++) { // i+1번 줄
-                        if (lineCount[i + 1][k] == 0) {
-                            continue;
-                        }
-                        if ((ban & k) == 0) {
-                            maxCount[i + 1][k] = Math.max(maxCount[i + 1][k], maxCount[i][j] + lineCount[i + 1][k]);
+                    validBit[i].add(j);
+                    int ban = (j << 1) | (j >> 1);
+                    int bitCount = Integer.bitCount(j);
+
+                    for (int bit:validBit[i - 1]) {
+                        if ((ban & bit) == 0) {
+                            currDp[j] = Math.max(currDp[j], prevDp[bit] + bitCount);
                         }
                     }
                 }
-                maxCount[i + 1][0] = max;
+                prevDp = currDp;
+                currDp = new int[maxBit];
             }
 
             int max = 0;
             for (int i = 0; i < maxBit; i++) {
-                max = Math.max(max, maxCount[n - 1][i]);
+                max = Math.max(max, prevDp[i]);
             }
 
             sb.append(max).append("\n");
         }
         System.out.println(sb);
-    }
-
-    static void getAllBit(int m, int y, int[] lineCount, int currBit, int ban) {
-        for (int i = y; i < m; i++) {
-            if ((ban & (1 << i)) == 0) {
-                lineCount[currBit | (1 << i)] = lineCount[currBit] + 1;
-                getAllBit(m, i + 1, lineCount, currBit | (1 << i), ban | (1 << (i + 1)));
-            }
-        }
     }
 }
