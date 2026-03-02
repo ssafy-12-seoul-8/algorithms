@@ -7,54 +7,54 @@ public class Main {
         StringTokenizer st;
 
         int n = Integer.parseInt(br.readLine());
-        PriorityQueue<int[]> all = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
-        TreeSet<Integer> starts = new TreeSet<>();
+        int[][] data = new int[n][2];
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int home = Integer.parseInt(st.nextToken());
             int office = Integer.parseInt(st.nextToken());
+
             if (home < office) {
-                all.add(new int[]{home, office});
-                starts.add(home);
-            } else {
-                all.add(new int[]{office, home});
-                starts.add(office);
+                data[i][0] = home;
+                data[i][1] = office;
+                continue;
             }
+            data[i][0] = office;
+            data[i][1] = home;
         }
 
         int l = Integer.parseInt(br.readLine());
 
-        // 현재 철로에 집과 사무실이 모두 포함. 먼저 벗어나는 거 기준 정렬
-        PriorityQueue<int[]> include = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
-        // 현재 철로에 집만 포함. 철로에 빨리 들어가는 기준 정렬
-        PriorityQueue<int[]> reserve = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-
-        int start = starts.pollFirst();
-        while (!all.isEmpty() && all.peek()[0] <= start + l) {
-            reserve.add(all.poll());
+        // 선분이 x위치일때 포함되거나 제외된다
+        PriorityQueue<Point> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.x));
+        for (int i = 0; i < n; i++) {
+            if (data[i][1] - data[i][0] > l) {
+                continue;
+            }
+            pq.add(new Point(data[i][1], 1));
+            pq.add(new Point(data[i][0] + l + 1, -1));
         }
-        while (!reserve.isEmpty() && reserve.peek()[1] <= start + l) {
-            include.add(reserve.poll());
-        }
-        int max = include.size();
 
-        while (!starts.isEmpty()) {
-            start = starts.pollFirst();
-
-            while (!all.isEmpty() && all.peek()[0] <= start + l) {
-                reserve.add(all.poll());
+        int max = 0;
+        int cnt = 0;
+        while (!pq.isEmpty()) {
+            int currEnd = pq.peek().x;
+            while (!pq.isEmpty() && pq.peek().x == currEnd) {
+                cnt += pq.poll().v;
             }
-            while (!reserve.isEmpty() && reserve.peek()[1] <= start + l) {
-                include.add(reserve.poll());
-            }
-            while (!include.isEmpty() && include.peek()[0] < start) {
-                include.poll();
-            }
-            max = Math.max(max, include.size());
-
+            max = Math.max(max, cnt);
         }
 
         System.out.println(max);
+    }
+
+    private static class Point {
+        int x;
+        int v;
+
+        public Point(int x, int v) {
+            this.x = x;
+            this.v = v;
+        }
     }
 }
