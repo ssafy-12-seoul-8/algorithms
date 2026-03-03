@@ -9,18 +9,17 @@ class Main{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int sum = 0;
-        int highest = Integer.MIN_VALUE;
+        int[] arr = new int[n];
+        int first = Integer.parseInt(st.nextToken());
+        arr[0] = first;
+        int ans = first;
 
-        for (int i = 0; i < n; i++) {
-            sum += Integer.parseInt(st.nextToken());
-            highest = Math.max(highest, sum);
-
-            if (sum < 0) {
-                sum = 0;
-            }
+        for (int i = 1; i < n; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            arr[i] = Math.max(num, arr[i - 1] + num);
+            ans = Math.max(ans, arr[i]);
         }
 
-        System.out.println(highest);
+        System.out.println(ans);
     }
 }
