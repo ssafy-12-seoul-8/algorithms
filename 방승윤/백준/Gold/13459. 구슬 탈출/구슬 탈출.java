@@ -52,10 +52,6 @@ class Main{
             int by = curr[3];
             int depth = curr[4];
 
-            if (depth == 10) {
-                break;
-            }
-
             for (int d = 0; d < 4; d++) {
                 int nrx = rx;
                 int nry = ry;
@@ -98,6 +94,10 @@ class Main{
                 }
 
                 if (visited[nrx][nry][nbx][nby]) {
+                    continue;
+                }
+
+                if (depth == 9) {
                     continue;
                 }
 
