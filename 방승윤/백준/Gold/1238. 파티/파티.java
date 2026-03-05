@@ -6,18 +6,19 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-class Main {
+class Main{
     static class Edge implements Comparable<Edge> {
         int v;
-        int w;
+        int t;
 
-        Edge(int v, int w) {
+        Edge(int v, int t) {
             this.v = v;
-            this.w = w;
+            this.t = t;
         }
 
+        @Override
         public int compareTo(Edge edge) {
-            return this.w - edge.w;
+            return this.t - edge.t;
         }
     }
 
@@ -28,82 +29,77 @@ class Main {
         int M = Integer.parseInt(st.nextToken());
         int X = Integer.parseInt(st.nextToken());
         ArrayList<Edge>[] conn = new ArrayList[N + 1];
+        ArrayList<Edge>[] connRe = new ArrayList[N + 1];
 
         for (int i = 1; i <= N; i++) {
             conn[i] = new ArrayList<>();
+            connRe[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            conn[Integer.parseInt(st.nextToken())].add(new Edge(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+            int s = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            conn[s].add(new Edge(v, w));
+            connRe[v].add(new Edge(s, w));
         }
 
-        int max = 0;
-        PriorityQueue<Edge> pq;
-        int[] cost;
-        int a = 0;
-        int b = 0;
+        int ans = 0;
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.add(new Edge(X, 0));
+        int[] time = new int[N + 1];
+        Arrays.fill(time, Integer.MAX_VALUE);
+        time[X] = 0;
+
+        while (!pq.isEmpty()) {
+            Edge curr = pq.poll();
+
+            if (curr.t > time[curr.v]) {
+                continue;
+            }
+
+            for (Edge next : conn[curr.v]) {
+                int nt = curr.t + next.t;
+
+                if (time[next.v] <= nt) {
+                    continue;
+                }
+
+                pq.add(new Edge(next.v, nt));
+                time[next.v] = nt;
+            }
+        }
+
+        pq = new PriorityQueue<>();
+        pq.add(new Edge(X, 0));
+        int[] timeRe = new int[N + 1];
+        Arrays.fill(timeRe, Integer.MAX_VALUE);
+        timeRe[X] = 0;
+
+        while (!pq.isEmpty()) {
+            Edge curr = pq.poll();
+
+            if (curr.t > timeRe[curr.v]) {
+                continue;
+            }
+
+            for (Edge next : connRe[curr.v]) {
+                int nt = curr.t + next.t;
+
+                if (timeRe[next.v] <= nt) {
+                    continue;
+                }
+
+                pq.add(new Edge(next.v, nt));
+                timeRe[next.v] = nt;
+            }
+        }
 
         for (int i = 1; i <= N; i++) {
-            pq = new PriorityQueue<>();
-            pq.add(new Edge(i, 0));
-            cost = new int[N + 1];
-            Arrays.fill(cost, Integer.MAX_VALUE);
-            a = 0;
-
-            while (!pq.isEmpty()) {
-                Edge curr = pq.poll();
-
-                if (curr.v == X) {
-                    a = curr.w;
-                    break;
-                }
-
-                if (curr.w > cost[curr.v]) {
-                    continue;
-                }
-
-                for (Edge next : conn[curr.v]) {
-                    int newW = curr.w + next.w;
-
-                    if (cost[next.v] > newW) {
-                        cost[next.v] = newW;
-                        pq.add(new Edge(next.v, newW));
-                    }
-                }
-            }
-
-            pq = new PriorityQueue<>();
-            pq.add(new Edge(X, 0));
-            Arrays.fill(cost, Integer.MAX_VALUE);
-            b = 0;
-
-            while (!pq.isEmpty()) {
-                Edge curr = pq.poll();
-
-                if (curr.v == i) {
-                    b = curr.w;
-                    break;
-                }
-
-                if (curr.w > cost[curr.v]) {
-                    continue;
-                }
-
-                for (Edge next : conn[curr.v]) {
-                    int newW = curr.w + next.w;
-
-                    if (cost[next.v] > newW) {
-                        cost[next.v] = newW;
-                        pq.add(new Edge(next.v, newW));
-                    }
-                }
-            }
-
-            max = Math.max(max, a + b);
+            ans = Math.max(ans, time[i] + timeRe[i]);
         }
 
-        System.out.println(max);
-
+        System.out.println(ans);
     }
 }
