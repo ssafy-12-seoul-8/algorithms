@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -29,12 +30,20 @@ public class Main {
 			}
 		}
 
+		int[][] spread = new int[R][C];
+
 		for (int t = 0; t < T; t++) {
-			int[][] spread = new int[R][C];
+			for (int s = 0; s < R; s++) {
+				Arrays.fill(spread[s], 0);
+			}
 
 			for (int i = 0; i < R; i++) {
 				for (int j = 0; j < C; j++) {
 					int unit = field[i][j] / 5;
+
+					if (unit == 0) {
+						continue;
+					}
 
 					for (int d = 0; d < 4; d++) {
 						int nx = i + dx[d];
