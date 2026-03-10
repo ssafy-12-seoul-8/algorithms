@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int[] parent;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
@@ -11,7 +13,10 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int n = Integer.parseInt(st.nextToken());
             int m = Integer.parseInt(st.nextToken());
-            boolean[] used = new boolean[n + 1];
+            parent = new int[n + 2];
+            for (int i = 0; i < n + 2; i++) {
+                parent[i] = i;
+            }
             int count = 0;
 
             PriorityQueue<BookRange> pq = new PriorityQueue<>();
@@ -24,17 +29,23 @@ public class Main {
 
             while (!pq.isEmpty()) {
                 BookRange pop = pq.poll();
-                for (int i = pop.start; i <= pop.end; i++) {
-                    if (!used[i]) {
-                        used[i] = true;
-                        count++;
-                        break;
-                    }
+                int p = find(pop.start);
+                if (p <= pop.end) {
+                    count++;
+                    parent[p] = find(p + 1);
                 }
             }
 
             System.out.println(count);
         }
+    }
+
+    static int find(int x) {
+        if (parent[x] == x) {
+            return x;
+        }
+        return parent[x] = find(parent[x]);
+
     }
 
     private static class BookRange implements Comparable<BookRange> {
