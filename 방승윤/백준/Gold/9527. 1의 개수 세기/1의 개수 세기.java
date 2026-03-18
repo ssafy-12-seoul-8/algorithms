@@ -17,15 +17,23 @@ public class Main {
 		}
 
 		long num = x;
-		int n = -1;
+		int n = 0;
+		long cnt = 1;
 
-		while (num != 0) {
+		while (num > 1) {
 			n++;
 			num >>= 1;
+			cnt *= 2;
 		}
 
-		long cnt = n * (long) Math.pow(2, (double) n - 1) + 1;
-		x -= (long) Math.pow(2, n);
+		cnt = n * cnt / 2 + 1;
+
+		while (n != 0) {
+			num *= 2;
+			n--;
+		}
+		
+		x -= num;
 
 		return cnt + x + solve(x);
 	}
