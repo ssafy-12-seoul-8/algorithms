@@ -45,15 +45,12 @@ public class Main {
 
             visit = new boolean[n];
             int pop = stack.pop();
-            ans = new ArrayList<>();
             count = 0;
-
-            findScc(pop);
-
-            visit = new boolean[n];
             dfs(pop);
 
             if (count == n) {
+                ans = new ArrayList<>();
+                findScc(pop);
                 Collections.sort(ans);
                 for (int a:ans) {
                     sb.append(a).append("\n");
@@ -61,6 +58,7 @@ public class Main {
             } else {
                 sb.append("Confused").append("\n");
             }
+
             sb.append("\n");
             br.readLine();
         }
@@ -81,11 +79,11 @@ public class Main {
     }
 
     public static void findScc(int curr) {
-        visit[curr] = true;
+        visit[curr] = false;
         ans.add(curr);
 
         for (int next : revNodes[curr]) {
-            if (!visit[next]) {
+            if (visit[next]) {
                 findScc(next);
             }
         }
