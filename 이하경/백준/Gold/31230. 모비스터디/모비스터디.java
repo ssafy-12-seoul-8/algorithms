@@ -2,17 +2,20 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int n;
+    static ArrayList<Node>[] nodes;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
 
-        ArrayList<Node>[] nodes = new ArrayList[n + 1];
+        nodes = new ArrayList[n + 1];
         for (int i = 0; i <= n; i++) {
             nodes[i] = new ArrayList<>();
         }
@@ -22,69 +25,20 @@ public class Main {
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
             long d = Long.parseLong(st.nextToken());
-            nodes[u].add(new Node(u, v, d));
-            nodes[v].add(new Node(v, u, d));
+            nodes[u].add(new Node(v, d));
+            nodes[v].add(new Node(u, d));
         }
 
-        long[] dist = new long[n + 1];
-        boolean[] visit = new boolean[n + 1];
-        ArrayList<Integer>[] prev = new ArrayList[n + 1];
-        for (int i = 0; i <= n; i++) {
-            prev[i] = new ArrayList<>();
-        }
-        Arrays.fill(dist, Long.MAX_VALUE);
-        dist[a] = 0;
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.add(new Node(0, a, 0));
-
-        while (!pq.isEmpty()) {
-            Node curr = pq.poll();
-
-            if (visit[curr.v]) {
-                if (dist[curr.v] == curr.d) {
-                    prev[curr.v].add(curr.u);
-                }
-                continue;
-            }
-
-            visit[curr.v] = true;
-            prev[curr.v].add(curr.u);
-
-            for (Node next:nodes[curr.v]) {
-                if (visit[next.v]) {
-                    if (dist[next.v] == curr.d + next.d) {
-                        prev[next.v].add(curr.v);
-                    }
-                    continue;
-                }
-
-                if (dist[next.v] >= curr.d + next.d) {
-                    dist[next.v] = curr.d + next.d;
-                    pq.add(new Node(curr.v, next.v, curr.d + next.d));
-                }
-            }
-        }
+        long[] distA = dijkstra(a);
+        long[] distB = dijkstra(b);
 
         ArrayList<Integer> ans = new ArrayList<>();
-        Queue<Integer> q = new LinkedList<>();
-        ans.add(b);
-        q.add(b);
-        visit[b] = false;
-        visit[0] = false;
-
-        while (!q.isEmpty()) {
-            int curr = q.poll();
-
-            for (int p:prev[curr]) {
-                if (visit[p]) {
-                    visit[p] = false;
-                    ans.add(p);
-                    q.add(p);
-                }
+        for (int i = 1; i <= n; i++) {
+            if (distA[i] + distB[i] == distA[b]) {
+                ans.add(i);
             }
         }
 
-        Collections.sort(ans);
         sb.append(ans.size()).append("\n");
         for (int an:ans) {
             sb.append(an).append(" ");
@@ -93,14 +47,44 @@ public class Main {
         System.out.println(sb);
     }
 
+    public static long[] dijkstra(int start) {
+        long[] dist = new long[n + 1];
+        boolean[] visit = new boolean[n + 1];
+        Arrays.fill(dist, Long.MAX_VALUE);
+        dist[start] = 0;
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(start, 0));
+
+        while (!pq.isEmpty()) {
+            Node curr = pq.poll();
+
+            if (visit[curr.u]) {
+                continue;
+            }
+
+            visit[curr.u] = true;
+
+            for(Node next:nodes[curr.u]) {
+                if (visit[next.u]) {
+                    continue;
+                }
+
+                if (dist[next.u] > curr.d + next.d) {
+                    dist[next.u] = curr.d + next.d;
+                    pq.add(new Node(next.u, curr.d + next.d));
+                }
+            }
+        }
+
+        return dist;
+    }
+
     private static class Node implements Comparable<Node> {
         int u;
-        int v;
         long d;
 
-        public Node(int u, int v, long d) {
+        public Node(int u, long d) {
             this.u = u;
-            this.v = v;
             this.d = d;
         }
 
