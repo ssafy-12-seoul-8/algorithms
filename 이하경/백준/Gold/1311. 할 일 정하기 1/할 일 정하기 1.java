@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
     static int n;
-    static int[][] dp;
+    static int[] dp;
     static int[][] price;
 
     public static void main(String[] args) throws IOException {
@@ -19,17 +19,19 @@ public class Main {
             }
         }
 
-        dp = new int[n][1 << n]; // n 이후로 비트 만드는 최소비용
-        System.out.println(find(0, 0));
+        dp = new int[1 << n]; // n 이후로 비트 만드는 최소비용
+        System.out.println(find(0));
     }
 
-    public static int find(int now, int visit) {
+    public static int find(int visit) {
+        int now = Integer.bitCount(visit);
+        
         if (now == n) {
             return 0;
         }
-        
-        if (dp[now][visit] != 0) {
-            return dp[now][visit];
+
+        if (dp[visit] != 0) {
+            return dp[visit];
         }
 
         int min = Integer.MAX_VALUE;
@@ -38,9 +40,9 @@ public class Main {
                 continue;
             }
 
-            min = Math.min(min, find(now + 1, visit | (1 << i)) + price[now][i]);
+            min = Math.min(min, find(visit | (1 << i)) + price[now][i]);
         }
 
-        return dp[now][visit] = min;
+        return dp[visit] = min;
     }
 }
