@@ -47,8 +47,9 @@ public class Main {
 		}
 
 		int ans = 0;
+		int cnt = 0;
 
-		while (!pq.isEmpty()) {
+		while (cnt < N) {
 			Node curr = pq.poll();
 			int u = find(curr.u);
 			int v = find(curr.v);
@@ -59,6 +60,7 @@ public class Main {
 
 			p[u] = v;
 			ans += curr.w;
+			cnt++;
 		}
 
 		System.out.println(ans);
